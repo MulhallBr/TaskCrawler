@@ -9,7 +9,7 @@
     android:background="@android:drawable/dialog_holo_light_frame">
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/taskicon"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="8dp"
@@ -31,8 +31,8 @@
         android:text="The name of the task im a giant nerd help ehiehfihfe"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
-        app:layout_constraintTop_toTopOf="@+id/image" />
+        app:layout_constraintStart_toEndOf="@+id/taskicon"
+        app:layout_constraintTop_toTopOf="@+id/taskicon" />
 
     <TextView
         android:id="@+id/taskinfo"
@@ -45,6 +45,6 @@
         android:text="takes 5 minutes, due in 8 hours"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@+id/taskicon"
         app:layout_constraintTop_toBottomOf="@+id/tasktitle" />
 </android.support.constraint.ConstraintLayout>

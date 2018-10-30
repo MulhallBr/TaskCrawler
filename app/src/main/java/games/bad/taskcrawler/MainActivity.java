@@ -3,6 +3,8 @@ package games.bad.taskcrawler;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import Model.AppDatabase;
+import Model.Task;
+import Model.TaskListRecyclerViewAdapter;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private List<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,29 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        AppDatabase.getAppDatabase(this).taskDAO().nukeTable(); //WIPES THE ENTIRE TASK TABLE.
+        Task.createTask(this, new Task("Make a healthy breakfast", 20, 0, 24, 8));
+        Task.createTask(this, new Task("Go to sleep a little earlier tonight :(", 50, 1, 24, 48));
+        Task.createTask(this, new Task("End global fascism", 69, 2, 24, 48));
+        Task.createTask(this, new Task("Clean up the streets.", 69, 2, 24, 48));
+        Task.createTask(this, new Task("Find 600 bees and put them inside somebody's car.", 69, 2, 24, 48));
+        Task.createTask(this, new Task("Go 2 days without smoking cigarettes", 69, 2, 24, 48));
+
+
+
+
+
+
+        tasks = Task.getTasksInOrder(this);
+
+        RecyclerView taskListRecyclerView = findViewById(R.id.task_list_recycler_view);
+        TaskListRecyclerViewAdapter taskListRecycleViewAdapter = new TaskListRecyclerViewAdapter(tasks, this);
+        taskListRecyclerView.setAdapter(taskListRecycleViewAdapter);
+        taskListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
     }
 
     @Override
