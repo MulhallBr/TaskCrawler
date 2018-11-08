@@ -9,10 +9,11 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database (entities = {Task.class}, version = 1)
+@Database (entities = {Task.class, Item.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE; //static instance of our database.
     public abstract TaskDAO taskDAO();
+    public abstract ItemDAO itemDAO();
 
 
     //Create, if necessary, and and return the static database instance.

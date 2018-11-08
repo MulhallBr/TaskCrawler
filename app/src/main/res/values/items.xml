@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weapons">
+        <item>
+            {\"id\":0,
+            \"item_type\": 0,
+            \"name\":\"Blunt Stick\",
+            \"description\":\"A short blunt piece of wood. No benefit.\",
+            \"icon_id\": 0,
+            \"cost\":5,
+            \"required_level\":0,
+            \"xp_boost\":0,
+            \"gold_boost\":0}
+        </item>
+        <item>
+            {\"id\":1,
+            \"item_type\": 0,
+            \"name\":\"Broken Shortsword\",
+            \"description\":\"Small broken short sword. +1% xp.\",
+            \"icon_id\": 1,
+            \"cost\":50,
+            \"required_level\":0,
+            \"xp_boost\":0,
+            \"gold_boost\":0}
+        </item>
+        <item>
+            {\"id\":2,
+            \"item_type\": 0,
+            \"name\":\"Dull Knife\",
+            \"description\":\"Not very good, but better than a stick. +1% gold.\",
+            \"icon_id\": 2,
+            \"cost\":100,
+            \"required_level\":0,
+            \"xp_boost\":0,
+            \"gold_boost\":1}
+        </item>
+    </string-array>
+</resources>
