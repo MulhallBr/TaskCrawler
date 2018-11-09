@@ -14,6 +14,8 @@ import java.util.List;
 
 import games.bad.taskcrawler.R;
 
+//this is the item class
+
 @Entity(tableName = "item_table")
 public class Item {
     public int getId() {
