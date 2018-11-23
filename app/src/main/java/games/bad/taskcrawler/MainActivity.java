@@ -26,7 +26,6 @@ import Model.TaskListRecyclerViewAdapter;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Task> tasks;
     private static final String TAG = "MainActivity";
 
     @Override
@@ -34,10 +33,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,13 +45,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         AppDatabase.getAppDatabase(this).taskDAO().nukeTable(); //WIPES THE ENTIRE TASK TABLE.
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         Task.createTask(this, new Task("Find 600 bees and put them inside somebody's car.", 69, 2, 24, 48));
         Task.createTask(this, new Task("Go 2 days without smoking cigarettes", 69, 2, 24, 48));
 
-        tasks = Task.getTasksInOrder(this);
+        List<Task> tasks = Task.getTasksInOrder(this);
         RecyclerView taskListRecyclerView = findViewById(R.id.task_list_recycler_view);
         TaskListRecyclerViewAdapter taskListRecycleViewAdapter = new TaskListRecyclerViewAdapter(tasks, this);
         taskListRecyclerView.setAdapter(taskListRecycleViewAdapter);
@@ -132,9 +131,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_shop) {
             Intent myIntent = new Intent(MainActivity.this, ShopActivity.class);
             MainActivity.this.startActivity(myIntent);
+
         } else if (id == R.id.nav_new_task) {
 
         } else if (id == R.id.nav_inventory) {
+            Intent myIntent = new Intent(MainActivity.this, InventoryActivity.class);
+            MainActivity.this.startActivity(myIntent);
 
         } else if (id == R.id.nav_settings) {
 

@@ -168,7 +168,7 @@ public class Item {
         for(int i = 0; i < weaponsJson.length; i++) {
             try {
                 item_json = new JSONObject(weaponsJson[i]);
-                Log.d("DEATH","ABOOT TO CREATE AN ITEM:");
+                Log.d("DEATH","ABOUT TO CREATE AN ITEM:");
                 if(!Item.itemExists(context, item_json.getInt("id")))  {
                     Log.d("DEATH","CREATING THE ITEM!!!!!!!!!!!!!!!!!:");
                     Item.insertItem(context, new Item(  item_json.getInt("id"),
@@ -181,7 +181,7 @@ public class Item {
                                                         item_json.getInt("xp_boost"),
                                                         item_json.getInt("gold_boost")));
                 }
-            }catch (JSONException e) { Log.e("JSON_ERROR", "exception", e);}
+            } catch (JSONException e) { Log.e("JSON_ERROR", "exception", e);}
         }
     }
 }

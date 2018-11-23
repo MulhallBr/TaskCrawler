@@ -1,5 +1,6 @@
 package Model;
 
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import games.bad.taskcrawler.R;
+
 
 public class TaskListRecyclerViewAdapter extends RecyclerView.Adapter<TaskListRecyclerViewAdapter.ViewHolder> {
     private List<Task> tasks = new ArrayList<>();
