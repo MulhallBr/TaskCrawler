@@ -9,7 +9,8 @@ import android.util.Log;
 import java.util.List;
 
 import Model.Item;
-import Model.ItemListAdapter;
+import Model.InventoryItemListAdapter;
+import Model.ShopItemListAdapter;
 
 public class ShopActivity extends AppCompatActivity {
 
@@ -27,16 +28,13 @@ public class ShopActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Item.initializeItems(this, this.getResources());
+        //Item.initializeItems(this, this.getResources()); //fill the database with initial data if the db is not already full.
+        List<Item> items = Item.getItems(this); //get all the items from the database.
 
-        List<Item> items = Item.getItems(this);
-
+        //fill the recycler view with the data from the Items.
         RecyclerView shopListRecyclerView = findViewById(R.id.item_recyclerview);
-
-        ItemListAdapter shopItemListRecyclerViewAdapter = new ItemListAdapter(items, this);
-
+        ShopItemListAdapter shopItemListRecyclerViewAdapter = new ShopItemListAdapter(items, this);
         shopListRecyclerView.setAdapter(shopItemListRecyclerViewAdapter);
-
         shopListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }

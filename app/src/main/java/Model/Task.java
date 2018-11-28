@@ -10,6 +10,8 @@ import java.util.List;
 @Entity(tableName = "task_table")
 public class Task {
 
+    private static final String TAG = "TASK";
+
     @ColumnInfo(name = "title")
     private String title; //the title of the task.
 

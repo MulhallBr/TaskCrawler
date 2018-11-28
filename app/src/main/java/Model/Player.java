@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "player_table")
 public class Player {
 
+    private static final String TAG = "PLAYER";
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 

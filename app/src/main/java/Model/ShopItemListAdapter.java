@@ -18,11 +18,13 @@ import java.util.List;
 import games.bad.taskcrawler.R;
 
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
+public class ShopItemListAdapter extends RecyclerView.Adapter<ShopItemListAdapter.ViewHolder> {
 
     private List<Item> items = new ArrayList<>();
+    private static final String TAG = "SHOPITEMLISTADAPTER";
 
-    public ItemListAdapter(List<Item> items, Context context) {
+
+    public ShopItemListAdapter(List<Item> items, Context context) {
         this.items = items;
     }
 
@@ -30,24 +32,28 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shop_itemlist_item, parent, false);
-        ItemListAdapter.ViewHolder viewHolder = new ItemListAdapter.ViewHolder(view);
+        ShopItemListAdapter.ViewHolder viewHolder = new ShopItemListAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemListAdapter.ViewHolder holder, int position) {
-        holder.itemName.setText(this.items.get(position).getName());
-        holder.itemDescription.setText(this.items.get(position).getDescription());
-        holder.itemCost.setText(Integer.toString(this.items.get(position).getCost()));
-        //attach onclick listener....
+    public void onBindViewHolder(@NonNull ShopItemListAdapter.ViewHolder holder, int position) {
+        //this is the method that fills the recycler view with elements.
+        //because this is the shop, we do not want to display items that have already been purchased.
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "You clicked the thing!", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });
+        if(!this.items.get(position).isPurchased()) { //if this item is NOT purchased...
+            holder.itemName.setText(this.items.get(position).getName());
+            holder.itemDescription.setText(this.items.get(position).getDescription());
+            holder.itemCost.setText(Integer.toString(this.items.get(position).getCost()));
+            //attach onclick listener....
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(v, "You want to buy this item!!!!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
     }
 
     @Override
