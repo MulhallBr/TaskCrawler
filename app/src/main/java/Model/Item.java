@@ -15,9 +15,11 @@ import java.util.List;
 import games.bad.taskcrawler.R;
 
 //this is the item class
+//it is both a normal POJO of the item class, as well as a description of how the item data will be stored in the database.
 
 @Entity(tableName = "item_table")
 public class Item {
+    private static final String TAG = "ITEM";
     public int getId() {
         return id;
     }
@@ -157,6 +159,7 @@ public class Item {
         return items;
     }
 
+    //static method to initialize all item data.
     public static void initializeItems(Context context, Resources res) {
         //read the item data from an XML source
         //insert that data into the sql database if it does not already exist.

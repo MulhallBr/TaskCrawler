@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.List;
 
 import Model.Item;
-import Model.ItemListAdapter;
+import Model.InventoryItemListAdapter;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -27,18 +27,15 @@ public class InventoryActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Item.initializeItems(this, this.getResources());
+        //Item.initializeItems(this, this.getResources()); //init the database, if it is not already.
 
-        List<Item> items = Item.getItems(this);
+        List<Item> items = Item.getItems(this); //get all items from the db
 
+        //fill the recyclerview with the items! using the default itemListAdapter.
         RecyclerView inventoryListRecyclerView = findViewById(R.id.item_recyclerview);
-
-        ItemListAdapter shopItemListRecyclerViewAdapter = new ItemListAdapter(items, this);
-
+        InventoryItemListAdapter shopItemListRecyclerViewAdapter = new InventoryItemListAdapter(items, this);
         inventoryListRecyclerView.setAdapter(shopItemListRecyclerViewAdapter);
-
         inventoryListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
 

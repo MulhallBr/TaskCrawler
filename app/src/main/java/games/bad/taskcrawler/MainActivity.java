@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import Model.AppDatabase;
+import Model.Item;
 import Model.Task;
 import Model.TaskListRecyclerViewAdapter;
 
@@ -31,8 +32,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "OnCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Item.initializeItems(this, this.getResources()); //init the database, if it is not already.
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -133,7 +139,8 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(myIntent);
 
         } else if (id == R.id.nav_new_task) {
-
+            Intent myIntent = new Intent(MainActivity.this, TaskActivity.class);
+            MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_inventory) {
             Intent myIntent = new Intent(MainActivity.this, InventoryActivity.class);
             MainActivity.this.startActivity(myIntent);

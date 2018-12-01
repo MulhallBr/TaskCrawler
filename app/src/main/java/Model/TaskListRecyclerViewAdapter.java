@@ -18,6 +18,8 @@ import games.bad.taskcrawler.R;
 
 
 public class TaskListRecyclerViewAdapter extends RecyclerView.Adapter<TaskListRecyclerViewAdapter.ViewHolder> {
+
+    private static final String TAG = "TASKLISTRECYCLERVIEWADAPTER";
     private List<Task> tasks = new ArrayList<>();
     private Context context;
 
