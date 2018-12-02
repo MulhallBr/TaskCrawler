@@ -12,6 +12,104 @@ public class Task {
 
     private static final String TAG = "TASK";
 
+    public int getTimeToCompleteHours() {
+        return timeToCompleteHours;
+    }
+
+    public void setTimeToCompleteHours(int timeToCompleteHours) {
+        this.timeToCompleteHours = timeToCompleteHours;
+    }
+
+    public int getTimeToCompleteMinutes() {
+        return timeToCompleteMinutes;
+    }
+
+    public void setTimeToCompleteMinutes(int timeToCompleteMinutes) {
+        this.timeToCompleteMinutes = timeToCompleteMinutes;
+    }
+
+    public int getFirstOccurrenceYear() {
+        return firstOccurrenceYear;
+    }
+
+    public void setFirstOccurrenceYear(int firstOccurrenceYear) {
+        this.firstOccurrenceYear = firstOccurrenceYear;
+    }
+
+    public int getFirstOccurrenceMonth() {
+        return firstOccurrenceMonth;
+    }
+
+    public void setFirstOccurrenceMonth(int firstOccurrenceMonth) {
+        this.firstOccurrenceMonth = firstOccurrenceMonth;
+    }
+
+    public int getFirstOccurrenceDayOfMonth() {
+        return firstOccurrenceDayOfMonth;
+    }
+
+    public void setFirstOccurrenceDayOfMonth(int firstOccurrenceDayOfMonth) {
+        this.firstOccurrenceDayOfMonth = firstOccurrenceDayOfMonth;
+    }
+
+    public int getFirstOccurrenceHour() {
+        return firstOccurrenceHour;
+    }
+
+    public void setFirstOccurrenceHour(int firstOccurrenceHour) {
+        this.firstOccurrenceHour = firstOccurrenceHour;
+    }
+
+    public int getFirstOccurrenceMinute() {
+        return firstOccurrenceMinute;
+    }
+
+    public void setFirstOccurrenceMinute(int firstOccurrenceMinute) {
+        this.firstOccurrenceMinute = firstOccurrenceMinute;
+    }
+
+    public int getRecurrenceHour() {
+        return recurrenceHour;
+    }
+
+    public void setRecurrenceHour(int recurrenceHour) {
+        this.recurrenceHour = recurrenceHour;
+    }
+
+    public int getRecurrenceMinute() {
+        return recurrenceMinute;
+    }
+
+    public void setRecurrenceMinute(int recurrenceMinute) {
+        this.recurrenceMinute = recurrenceMinute;
+    }
+
+    @ColumnInfo(name = "time_to_complete_hours")
+    private int timeToCompleteHours;
+    @ColumnInfo(name = "time_to_complete_minutes")
+    private int timeToCompleteMinutes;
+
+    @ColumnInfo(name = "first_occurrence_year")
+    private int firstOccurrenceYear;
+
+    @ColumnInfo(name = "first_occurrence_month")
+    private int firstOccurrenceMonth;
+
+    @ColumnInfo(name = "first_occurrence_day_of_month")
+    private int firstOccurrenceDayOfMonth;
+
+    @ColumnInfo(name = "first_occurrence_hour")
+    private int firstOccurrenceHour;
+
+    @ColumnInfo(name = "first_occurrence_minute")
+    private int firstOccurrenceMinute;
+
+    @ColumnInfo(name = "recurrenceHour")
+    private int recurrenceHour;
+
+    @ColumnInfo(name = "recurrenceMinute")
+    private int recurrenceMinute;
+
     @ColumnInfo(name = "title")
     private String title; //the title of the task.
 
@@ -92,6 +190,10 @@ public class Task {
         //go into the database and retrieve every task, order them by date, pushing those that have been finished recently to the bottom.
         List<Task> tasks = AppDatabase.getAppDatabase(context).taskDAO().getAllTasks();
         return tasks;
+    }
+
+    public static Task getTaskById(Context context, int id) {
+        return AppDatabase.getAppDatabase(context).taskDAO().getTaskById(id);
     }
 
     public int getId() {

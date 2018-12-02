@@ -10,10 +10,9 @@
     tools:context=".ShopActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/item_recyclerview"
+        android:id="@+id/weapon_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ShopActivity">
-    </android.support.v7.widget.RecyclerView>
+        tools:context=".ShopActivity"></android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

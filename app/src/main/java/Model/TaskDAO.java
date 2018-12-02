@@ -25,6 +25,10 @@ public interface TaskDAO {
     @Query("SELECT * FROM task_table ORDER BY id ASC")
     List<Task> getAllTasks();
 
+    @Query("SELECT * FROM task_table WHERE id = :id")
+    Task getTaskById(int id);
+
+
     @Query("DELETE FROM task_table")
     public void nukeTable();
 }

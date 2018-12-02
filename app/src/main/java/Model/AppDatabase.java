@@ -8,15 +8,16 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database (entities = {Task.class, Item.class}, version = 1)
+@Database (entities = {Task.class, Weapon.class, Icon.class}, version = 14)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE; //static instance of our database.
     private static final String TAG = "APPDATABASE";
 
-
     //we need to create a static instance of every DAO that we want to use in this database.
     public abstract TaskDAO taskDAO();
-    public abstract ItemDAO itemDAO();
+    public abstract WeaponDAO weaponDAO();
+    public abstract IconDAO iconDAO();
+
 
     //Create, if necessary, and and return the static database instance.
     //this is singleton hackery, which can only return ONE instance of the object.
