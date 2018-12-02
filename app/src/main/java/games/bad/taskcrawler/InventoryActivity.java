@@ -8,8 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
-import Model.Item;
-import Model.InventoryItemListAdapter;
+import Adapters.WeaponSelectListAdapter;
+import Model.Weapon;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -27,15 +27,13 @@ public class InventoryActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //Item.initializeItems(this, this.getResources()); //init the database, if it is not already.
-
-        List<Item> items = Item.getItems(this); //get all items from the db
+        List<Weapon> weapons = Weapon.getWeapons(this); //get all items from the db
 
         //fill the recyclerview with the items! using the default itemListAdapter.
-        RecyclerView inventoryListRecyclerView = findViewById(R.id.item_recyclerview);
-        InventoryItemListAdapter shopItemListRecyclerViewAdapter = new InventoryItemListAdapter(items, this);
-        inventoryListRecyclerView.setAdapter(shopItemListRecyclerViewAdapter);
-        inventoryListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView weaponRecyclerView = findViewById(R.id.weapon_recyclerview);
+        WeaponSelectListAdapter weaponSelectListAdapter = new WeaponSelectListAdapter(weapons, this);
+        weaponRecyclerView.setAdapter(weaponSelectListAdapter);
+        weaponRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 

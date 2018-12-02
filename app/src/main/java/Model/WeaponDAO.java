@@ -9,23 +9,23 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 @Dao
-public interface ItemDAO {
+public interface WeaponDAO {
 
-    @Query("SELECT EXISTS(SELECT 1 FROM item_table WHERE id = :id)")
+    @Query("SELECT EXISTS(SELECT 1 FROM weapon_table WHERE id = :id)")
     int itemExists(int id);
 
     @Insert
-    void insertItem(Item item);
+    void insertItem(Weapon weapon);
 
     @Update
-    void updateItem(Item item);
+    void updateWeapon(Weapon weapon);
 
     @Delete
-    void deleteItem(Item item);
+    void deleteItem(Weapon weapon);
 
-    @Query("SELECT * FROM item_table ORDER BY id ASC")
-    List<Item> getAllItems();
+    @Query("SELECT * FROM weapon_table ORDER BY id ASC")
+    List<Weapon> getAllItems();
 
-    @Query("DELETE FROM item_table")
+    @Query("DELETE FROM weapon_table")
     public void nukeTable();
 }

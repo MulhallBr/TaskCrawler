@@ -12,11 +12,11 @@
         android:id="@+id/icon_imageview"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/weapon_1" />
 
@@ -24,27 +24,11 @@
         android:id="@+id/icon_title_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_imageview"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/icon_imageview"
         app:layout_constraintTop_toTopOf="@+id/icon_imageview" />
-
-    <TextView
-        android:id="@+id/itemdescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/icon_title_textview"
-        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

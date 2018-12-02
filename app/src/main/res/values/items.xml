@@ -2,37 +2,81 @@
 <resources>
     <string-array name="weapons">
         <item>
-            {\"id\":0,
-            \"item_type\": 0,
+            {\"purchased\": true,
             \"name\":\"Blunt Stick\",
             \"description\":\"A short blunt piece of wood. No benefit.\",
-            \"icon_id\": 0,
+            \"icon_filename\": \"@drawable/weapon_1\",
             \"cost\":5,
             \"required_level\":0,
             \"xp_boost\":0,
             \"gold_boost\":0}
         </item>
         <item>
-            {\"id\":1,
-            \"item_type\": 0,
+            {\"purchased\": true,
             \"name\":\"Broken Shortsword\",
             \"description\":\"Small broken short sword. +1% xp.\",
-            \"icon_id\": 1,
+            \"icon_filename\": \"@drawable/weapon_2\",
             \"cost\":50,
             \"required_level\":0,
             \"xp_boost\":0,
             \"gold_boost\":0}
         </item>
         <item>
-            {\"id\":2,
-            \"item_type\": 0,
-            \"name\":\"Dull Knife\",
+            {\"name\":\"Dull Knife\",
             \"description\":\"Not very good, but better than a stick. +1% gold.\",
-            \"icon_id\": 2,
+            \"icon_filename\": \"@drawable/weapon_3\",
             \"cost\":100,
             \"required_level\":0,
             \"xp_boost\":0,
             \"gold_boost\":1}
+        </item>
+    </string-array>
+
+    <string-array name="icons">
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_elf_archer\",
+            \"purchased\": true,
+            \"icon_type\": 0,
+            \"name\":\"Elf archer\",
+            \"icon_id\": 0,
+            \"cost\":0,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_elf_man\",
+            \"purchased\": true,
+            \"icon_type\": 0,
+            \"name\":\"Elf ranger\",
+            \"icon_id\": 0,
+            \"cost\":0,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_elf_paladin\",
+            \"purchased\": true,
+            \"icon_type\": 0,
+            \"name\":\"Elf paladin\",
+            \"icon_id\": 0,
+            \"cost\":0,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_goblin_ranger\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Goblin ranger\",
+            \"icon_id\": 0,
+            \"cost\":5,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_human_knight\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Human knight\",
+            \"icon_id\": 0,
+            \"cost\":15,
+            \"required_level\":5}
         </item>
     </string-array>
 </resources>

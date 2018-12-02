@@ -15,5 +15,7 @@
     <color name="shopLight">#d05ce3</color>
     <color name="shopDark">#6a0080</color>
 
+    <color name="warningPrimary">#ff5131</color>
+
 
 </resources>

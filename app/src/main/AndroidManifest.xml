@@ -27,7 +27,11 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".InventoryActivity" />
-        <activity android:name=".TaskActivity"></activity>
+        <activity android:name=".NewTaskActivity" />
+        <activity android:name=".EditTaskActivity" />
+        <activity android:name=".TaskActivity" />
+        <activity android:name=".DayHourPickerDialog" />
+        <activity android:name=".IconSelectActivity"></activity>
     </application>
 
 </manifest>

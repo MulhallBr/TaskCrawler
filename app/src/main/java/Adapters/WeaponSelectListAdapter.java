@@ -1,4 +1,4 @@
-package Model;
+package Adapters;
 
 
 import android.content.Context;
@@ -15,33 +15,36 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Weapon;
 import games.bad.taskcrawler.R;
 
+public class WeaponSelectListAdapter extends RecyclerView.Adapter<WeaponSelectListAdapter.ViewHolder> {
 
-public class InventoryItemListAdapter extends RecyclerView.Adapter<InventoryItemListAdapter.ViewHolder> {
+    private static final String TAG = "WEAPON ITEM LIST ADAPTER";
 
-    private static final String TAG = "ITEMLISTADAPTER";
+    private List<Weapon> weapons = new ArrayList<>();
+    private Context context;
 
-    private List<Item> items = new ArrayList<>();
-
-    public InventoryItemListAdapter(List<Item> items, Context context) {
-        this.items = items;
+    public WeaponSelectListAdapter(List<Weapon> weapons, Context context) {
+        this.weapons = weapons;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.inventory_itemlist_item, parent, false);
-        InventoryItemListAdapter.ViewHolder viewHolder = new InventoryItemListAdapter.ViewHolder(view);
+        WeaponSelectListAdapter.ViewHolder viewHolder = new WeaponSelectListAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InventoryItemListAdapter.ViewHolder holder, int position) {
-        holder.itemName.setText(this.items.get(position).getName());
-        holder.itemDescription.setText(this.items.get(position).getDescription());
-        //attach onclick listener....
+    public void onBindViewHolder(@NonNull WeaponSelectListAdapter.ViewHolder holder, int position) {
 
+        holder.itemIcon.setImageResource(this.context.getResources().getIdentifier(this.weapons.get(position).getIconFilename(), "drawable", this.context.getPackageName()));
+        holder.itemName.setText(this.weapons.get(position).getName());
+        holder.itemDescription.setText(this.weapons.get(position).getDescription());
+        //attach onclick listener....
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +56,7 @@ public class InventoryItemListAdapter extends RecyclerView.Adapter<InventoryItem
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.weapons.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,8 +67,8 @@ public class InventoryItemListAdapter extends RecyclerView.Adapter<InventoryItem
 
         ViewHolder(View itemView) {
             super(itemView);
-            itemIcon = itemView.findViewById( R.id.itemicon);
-            itemName = itemView.findViewById(R.id.itemname);
+            itemIcon = itemView.findViewById( R.id.icon_imageview);
+            itemName = itemView.findViewById(R.id.icon_title_textview);
             itemDescription = itemView.findViewById(R.id.itemdescription);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
