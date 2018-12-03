@@ -62,12 +62,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //;AppDatabase.getAppDatabase(this).taskDAO().nukeTable(); //WIPES THE ENTIRE TASK TABLE.
-        Task.createTask(this, new Task("Make a healthy breakfast", 20, 0, 24, 8));
-        Task.createTask(this, new Task("Go to sleep a little earlier tonight :(", 50, 1, 24, 48));
-        Task.createTask(this, new Task("End global fascism", 69, 2, 24, 48));
+        Task.createTask(this, new Task("Exercise", 20, 0, 24, 8));
+        Task.createTask(this, new Task("Take Out The Trash", 10, 1, 24, 48));
+        /*Task.createTask(this, new Task("End global fascism", 69, 2, 24, 48));
         Task.createTask(this, new Task("Clean up the streets.", 69, 2, 24, 48));
         Task.createTask(this, new Task("Find 600 bees and put them inside somebody's car.", 69, 2, 24, 48));
-        Task.createTask(this, new Task("Go 2 days without smoking cigarettes", 69, 2, 24, 48));
+        Task.createTask(this, new Task("Go 2 days without smoking cigarettes", 69, 2, 24, 48));*/
 
         List<Task> tasks = Task.getTasksInOrder(this);
         RecyclerView taskListRecyclerView = findViewById(R.id.task_list_recycler_view);

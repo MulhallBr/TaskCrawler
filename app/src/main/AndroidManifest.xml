@@ -19,21 +19,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ShopActivity"
-            android:label="@string/shop_name">
+        <activity android:name=".ShopActivity" android:label="@string/shop_name">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".InventoryActivity" />
-        <activity android:name=".NewTaskActivity" />
-        <activity android:name=".EditTaskActivity" />
+        <activity android:name=".InventoryActivity" android:label="Inventory"/>
+        <activity android:name=".NewTaskActivity" android:label="New Task"/>
+        <activity android:name=".EditTaskActivity" android:label="Edit Task"/>
         <activity android:name=".TaskActivity" />
         <activity android:name=".DayHourPickerDialog" />
-        <activity android:name=".IconSelectActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".IconSelectActivity" android:label="Icon Select"/>
+        <activity android:name=".SettingsActivity" android:label="Settings"/>
+        <activity android:name=".AboutActivity" android:label="About">
+        </activity>
     </application>
 
 </manifest>
