@@ -2,6 +2,8 @@ package games.bad.taskcrawler;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,9 +14,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import Interfaces.TaskTapCallback;
 import Model.AppDatabase;
 import Model.Icon;
 import Model.Task;
@@ -22,54 +28,76 @@ import Adapters.TaskListAdapter;
 import Model.Weapon;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, TaskTapCallback {
 
     private static final String TAG = "MainActivity";
-    DrawerLayout drawer;
+    private DrawerLayout drawer;
+    private RecyclerView taskListRecyclerView;
+    private TaskListAdapter taskListAdapter;
+
+    private Handler taskListUpdateHandler;
+    private Runnable taskListUpdateRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
-        AppDatabase.getAppDatabase(this).clearAllTables();
-        Weapon.initializeItems(this, this.getResources()); //init the database, if it is not already.
-        Icon.initializeItems(this, this.getResources());
-
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //Task.nukeTable(this);
+
+        Weapon.initializeItems(this, this.getResources()); //init the database, if it is not already.
+        Icon.initializeItems(this, this.getResources());
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //;AppDatabase.getAppDatabase(this).taskDAO().nukeTable(); //WIPES THE ENTIRE TASK TABLE.
-        Task.createTask(this, new Task("Make a healthy breakfast", 20, 0, 24, 8));
-        Task.createTask(this, new Task("Go to sleep a little earlier tonight :(", 50, 1, 24, 48));
-        Task.createTask(this, new Task("End global fascism", 69, 2, 24, 48));
-        Task.createTask(this, new Task("Clean up the streets.", 69, 2, 24, 48));
-        Task.createTask(this, new Task("Find 600 bees and put them inside somebody's car.", 69, 2, 24, 48));
-        Task.createTask(this, new Task("Go 2 days without smoking cigarettes", 69, 2, 24, 48));
-
         List<Task> tasks = Task.getTasksInOrder(this);
-        RecyclerView taskListRecyclerView = findViewById(R.id.task_list_recycler_view);
-        TaskListAdapter taskListRecycleViewAdapter = new TaskListAdapter(tasks, this);
-        taskListRecyclerView.setAdapter(taskListRecycleViewAdapter);
+        taskListRecyclerView = findViewById(R.id.task_list_recycler_view);
+        taskListAdapter = new TaskListAdapter(tasks, this);
+        taskListRecyclerView.setAdapter(taskListAdapter);
         taskListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //tell the task list adapter that this method is accepting callbacks.
+        taskListAdapter.setTapTaskCallback(this);
+
+        taskListUpdateHandler = new Handler();
+
+        taskListUpdateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateTaskList();
+                taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 15000); //15000
+            }
+        };
+        taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 15000);
+    }
+
+    //the task tap callback callback method
+    @Override
+    public void onTaskTapped(Task task){
+        //show the dialog
+        TaskPromptDialog tpd = new TaskPromptDialog(this, task);
+        tpd.show();
+    }
+
+
+    public void updateTaskList() {
+        this.taskListAdapter.updateList(Task.getTasksInOrder(this));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        taskListAdapter.updateList(Task.getTasksInOrder(this));
         //check the "Tasks" item when this activity resumes.
         NavigationView nv = (NavigationView) findViewById(R.id.nav_view);
         nv.getMenu().getItem(0).setChecked(true);

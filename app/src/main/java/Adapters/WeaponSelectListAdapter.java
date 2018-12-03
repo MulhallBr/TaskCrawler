@@ -65,6 +65,7 @@ public class WeaponSelectListAdapter extends RecyclerView.Adapter<WeaponSelectLi
         TextView itemDescription;
         ConstraintLayout parentLayout;
 
+
         ViewHolder(View itemView) {
             super(itemView);
             itemIcon = itemView.findViewById( R.id.icon_imageview);
