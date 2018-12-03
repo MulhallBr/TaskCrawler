@@ -14,6 +14,9 @@ public interface IconDAO {
     @Query("SELECT EXISTS(SELECT 1 FROM icon_table WHERE id = :id)")
     int iconExists(int id);
 
+    @Query("SELECT * FROM icon_table WHERE id = :id")
+    Icon getIcon(int id);
+
     @Query("SELECT * FROM icon_table WHERE purchased is 1")
     List<Icon> getAllPurchasedIcons();
 
