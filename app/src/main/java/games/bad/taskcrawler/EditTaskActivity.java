@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.List;
 
+import Model.AppDatabase;
 import Model.Task;
 
 public class EditTaskActivity extends TaskActivity {
@@ -37,13 +38,22 @@ public class EditTaskActivity extends TaskActivity {
 
         task_title = task.getTitle();
         task_icon_id = task.getIconId();
-        start_year = task.getFirstOccurrenceYear();
-        start_month = task.getFirstOccurrenceMonth();
-        start_day = task.getFirstOccurrenceDayOfMonth();
-        start_hour = task.getRecurrenceHour();
-        start_minute = task.getRecurrenceMinute();
 
+        length_hour = task.getLengthHours();
+        length_minute = task.getLengthMinutes();
+
+        next_occurrence_year = task.getNextOccurrenceYear();
+        next_occurrence_month = task.getNextOccurrenceMonth();
+        next_occurrence_day = task.getNextOccurrenceDay();
+        next_occurrence_hour = task.getNextOccurrenceHour();
+        next_occurrence_minute = task.getNextOccurrenceMinute();
+
+        interval_days = task.getIntervalDays();
+        interval_hours = task.getIntervalHour();
+
+        //Fill the views with the task data :)
         taskNameInput.setText(task.getTitle());
+        updateIconImageView();
         updateLengthTextView();
         updateFirstTimeTextView();
         updateRecurrenceTextView();
@@ -52,6 +62,31 @@ public class EditTaskActivity extends TaskActivity {
     @Override
     protected void onOkayButtonPressed() {
         super.onOkayButtonPressed();
+
+        task.setTitle(task_title);
+
+        task.setLengthHours(length_hour);
+        task.setLengthMinutes(length_minute);
+
+        task.setNextOccurrenceYear(next_occurrence_year);
+        task.setNextOccurrenceMonth(next_occurrence_month);
+        task.setNextOccurrenceDay(next_occurrence_day);
+        task.setNextOccurrenceHour(next_occurrence_hour);
+        task.setNextOccurrenceMinute(next_occurrence_minute);
+
+        task.setIconId(task_icon_id);
+
+        task.setIntervalDays(interval_days);
+        task.setIntervalHour(interval_hours);
+
+        task.commit(getApplicationContext());
         //save the changes made to this task.
+    }
+
+    @Override
+    protected void onBackButtonPressed() {
+        //this is actually the delete button!!!!
+        AppDatabase.getAppDatabase(getBaseContext()).taskDAO().deleteTask(task);//delete the task!
+        super.onBackButtonPressed();
     }
 }

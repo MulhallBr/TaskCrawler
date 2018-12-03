@@ -1,6 +1,8 @@
 package Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -39,13 +41,16 @@ public class IconSelectListAdapter extends RecyclerView.Adapter<IconSelectListAd
     public void onBindViewHolder(@NonNull IconSelectListAdapter.ViewHolder holder, int position) {
         holder.icon_imageview.setImageResource(this.context.getResources().getIdentifier(this.icons.get(position).getIconFilename(), "drawable", this.context.getPackageName()));
         holder.icon_textview.setText(this.icons.get(position).getName());
+        final int icon_id = this.icons.get(position).getId();
 
         //attach onclick listener....
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "You clicked the icon!!!!!!", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                Intent data = new Intent();
+                data.putExtra("icon_id",icon_id);
+                ((Activity)context).setResult(Activity.RESULT_OK, data);
+                ((Activity)context).finish();
             }
         });
     }

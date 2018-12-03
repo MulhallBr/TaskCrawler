@@ -6,25 +6,25 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
+
+import Model.Icon;
+import Model.Task;
 
 /*
     This is the base-class for both EditTaskActivity and NewTaskActivity. It is responsible for filling
@@ -33,6 +33,7 @@ import java.util.SimpleTimeZone;
  */
 
 public abstract class TaskActivity extends AppCompatActivity {
+    private static String TAG = "TASK_ACTIVITY";
     public TextView taskNameInput;
     protected ConstraintLayout iconSelectLayout;
     protected ConstraintLayout lengthSelectLayout;
@@ -45,6 +46,9 @@ public abstract class TaskActivity extends AppCompatActivity {
     protected TextView firstOcurranceTextView;
     protected TextView recurranceTextView;
 
+    protected ImageView iconImageView;
+    protected TextView iconTextView;
+
     protected String task_title = "";
 
     protected int task_icon_id = -1;
@@ -52,11 +56,11 @@ public abstract class TaskActivity extends AppCompatActivity {
     protected int length_hour = -1;
     protected int length_minute = -1;
 
-    protected int start_year = -1;
-    protected int start_month = -1;
-    protected int start_day = -1;
-    protected int start_hour = -1;
-    protected int start_minute = -1;
+    protected int next_occurrence_year = -1;
+    protected int next_occurrence_month = -1;
+    protected int next_occurrence_day = -1;
+    protected int next_occurrence_hour = -1;
+    protected int next_occurrence_minute = -1;
 
     protected int interval_days = -1;
     protected int interval_hours = -1;
@@ -81,6 +85,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         okayButton = findViewById(R.id.okayButton);
 
+        iconImageView = findViewById(R.id.icon_imageview);
+        iconTextView = findViewById(R.id.icon_titleview);
+
         lengthTextView = findViewById(R.id.lengthTextView);
 
         firstOcurranceTextView = findViewById(R.id.firstOcurranceTextView);
@@ -103,9 +110,8 @@ public abstract class TaskActivity extends AppCompatActivity {
         iconSelectLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(TaskActivity.this, IconSelectActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 420);
             }
         });
 
@@ -133,7 +139,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackButtonPressed();
             }
         });
 
@@ -142,60 +148,47 @@ public abstract class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onOkayButtonPressed();
-                finish();
             }
         });
+
+        updateIconImageView();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "Results returned!!!!!");
+        if (requestCode == 420) {
+            if (resultCode == RESULT_OK) {
+                task_icon_id = data.getIntExtra("icon_id", -1);
+                if(task_icon_id != -1) {
+                    updateIconImageView();
+                }
+            }
+        }
+    }
+
+    protected void updateIconImageView() {
+        if(Icon.iconExists(this, task_icon_id)) {
+            Icon icon = Icon.getIcon(this, task_icon_id);
+            iconImageView.setImageResource(this.getResources().getIdentifier(icon.getIconFilename(), "drawable", this.getPackageName()));
+            iconTextView.setText(icon.getName());
+        }
     }
 
     protected void updateRecurrenceTextView() {
-        if(interval_hours == 0 && interval_days == 0) {
-            recurranceTextView.setText("Never recurs");
-        }else{
-            StringBuilder sb = new StringBuilder();
-            sb.append("Recurs every ");
 
-            if(interval_days != 0) {
-                sb.append("%d day");
-                if(interval_days != 1) {
-                    sb.append("s");
-                }
-            }
+        recurranceTextView.setText(Task.getIntervalAsString(interval_days, interval_hours, true));
 
-            if(interval_days != 0 && interval_hours != 0){
-                sb.append(" and ");
-            }
-
-            if(interval_hours != 0) {
-                sb.append("%d hour");
-                if(interval_hours != 1) {
-                    sb.append("s");
-                }
-            }
-            if(interval_days != 0) {
-                recurranceTextView.setText(String.format(sb.toString(), interval_days, interval_hours));
-            }else{
-                recurranceTextView.setText(String.format(sb.toString(), interval_hours));
-            }
-        }
         onInputChanged();
     }
 
     protected void updateLengthTextView() {
-        lengthTextView.setText(String.format("Takes %d hour(s) and %d minute(s)", length_hour, length_minute));
+        lengthTextView.setText(Task.getLengthAsString(length_hour, length_minute));
         onInputChanged();
     }
 
     protected void updateFirstTimeTextView() {
-        Calendar myCalender = Calendar.getInstance();
-        //calculate the nice readable "Tues, Jan" from "dp_month = 1 && dp_dayOfMonth = 7"
-        myCalender.set(Calendar.YEAR, start_year);
-        myCalender.set(Calendar.MONTH, start_month);
-        myCalender.set(Calendar.DAY_OF_MONTH, start_day);
-
-        String day_of_week = myCalender.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-        String month_name = myCalender.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
-
-        firstOcurranceTextView.setText(String.format("First occurs on %s %s %d, %d at %02d:%02d", day_of_week, month_name, start_day, start_year, start_hour, start_minute));
+        firstOcurranceTextView.setText(Task.getNextOccurrenceAsString(next_occurrence_year, next_occurrence_month, next_occurrence_day, next_occurrence_hour, next_occurrence_minute));
         onInputChanged();
     }
 
@@ -217,7 +210,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         hourNumberPicker.setValue(3);
 
         final TextView recurTitle = (TextView) dialogView.findViewById(R.id.recurTitle);
-        final TextView upperTitle = (TextView) dialogView.findViewById(R.id.upperTitle);
+        final TextView upperTitle = (TextView) dialogView.findViewById(R.id.titleTextView);
 
         Button rpCancelButton = (Button) dialogView.findViewById(R.id.cancelButton);
         Button rpOkayButton = (Button) dialogView.findViewById(R.id.okayButton);
@@ -225,18 +218,13 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         class TitleUpdateInterface {
             void updateText() {
-                StringBuilder s = new StringBuilder();
-                s.append("%d day");
-                if(dayNumberPicker.getValue() != 1) { s.append("s"); }
-                s.append(", %d hour");
-                if(hourNumberPicker.getValue() != 1) { s.append("s"); }
                 if( dayNumberPicker.getValue() == 0 && hourNumberPicker.getValue() == 0) {
                     upperTitle.setText("Recurs");
-                    recurTitle.setText("Never");
                 }else{
                     upperTitle.setText("Recurs every");
-                    recurTitle.setText(String.format(s.toString(), dayNumberPicker.getValue(), hourNumberPicker.getValue()));
+
                 }
+                recurTitle.setText(Task.getIntervalAsString(dayNumberPicker.getValue(), hourNumberPicker.getValue(), false));
             }
         };
         final TitleUpdateInterface titleUpdateInterface = new TitleUpdateInterface();
@@ -293,11 +281,11 @@ public abstract class TaskActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int tp_hour, int tp_minute) {
                 if (view.isShown()) {
-                    start_year = dp_year;
-                    start_month = dp_month;
-                    start_day = dp_dayOfMonth;
-                    start_hour = tp_hour;
-                    start_minute = tp_minute;
+                    next_occurrence_year = dp_year;
+                    next_occurrence_month = dp_month;
+                    next_occurrence_day = dp_dayOfMonth;
+                    next_occurrence_hour = tp_hour;
+                    next_occurrence_minute = tp_minute;
 
                     updateFirstTimeTextView();
                 }
@@ -342,8 +330,12 @@ public abstract class TaskActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    protected void onOkayButtonPressed() {
+    protected void onBackButtonPressed() {
+        finish();
+    }
 
+    protected void onOkayButtonPressed() {
+        finish();
     }
 
     //called any time the user changes an input value

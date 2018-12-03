@@ -22,7 +22,7 @@ public class Icon extends Item {
         super(name, iconFilename, cost,requiredLevel,purchased);
     }
 
-    public static boolean itemExists(Context context, int id) {
+    public static boolean iconExists(Context context, int id) {
         if(AppDatabase.getAppDatabase(context).iconDAO().iconExists(id) == 1) {
             return true;
         }
@@ -36,6 +36,10 @@ public class Icon extends Item {
 
     public void commit(Context context) {
         AppDatabase.getAppDatabase(context).iconDAO().updateIcon(this);
+    }
+
+    public static Icon getIcon(Context context, int id) {
+        return AppDatabase.getAppDatabase(context).iconDAO().getIcon(id);
     }
 
     public static List<Icon> getIcons(Context context) {

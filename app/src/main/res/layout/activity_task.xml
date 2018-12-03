@@ -54,19 +54,19 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/icon_titleview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="Task Icon"
+                    android:text="Task enemy icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/icon_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -76,7 +76,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/icon_enemy_elf_archer" />
+                    app:srcCompat="@drawable/unknown" />
 
                 <View
                     android:id="@+id/divider7"
