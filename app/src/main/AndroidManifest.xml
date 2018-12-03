@@ -31,7 +31,9 @@
         <activity android:name=".EditTaskActivity" />
         <activity android:name=".TaskActivity" />
         <activity android:name=".DayHourPickerDialog" />
-        <activity android:name=".IconSelectActivity"></activity>
+        <activity android:name=".IconSelectActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>
