@@ -1,10 +1,11 @@
 package games.bad.taskcrawler;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -40,12 +41,12 @@ public class TaskPromptDialog extends Dialog {
         intervalTextView = findViewById(R.id.intervalTextView);
 
         editButton = findViewById(R.id.editButton);
-        fightButton = findViewById(R.id.fightButton);
+        fightButton = findViewById(R.id.okayButton);
 
         iconImageView.setImageResource(task.getIconResourceId(activity, activity.getResources()));
         titleTextView.setText(task.getTitle());
         lengthTextView.setText(task.getLengthAsString());
-        nextOccurrenceTextView.setText(task.getNextOccurrenceAsString());
+        nextOccurrenceTextView.setText(task.getNextOccurrenceAsString() + " _ " + Long.toString(task.complete(activity)[0]) + " _ " + Long.toString(task.complete(activity)[1]));
         intervalTextView.setText(task.getIntervalAsString(true));
 
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +61,7 @@ public class TaskPromptDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 fightButtonOnClick();
+
             }
         });
 
@@ -73,7 +75,18 @@ public class TaskPromptDialog extends Dialog {
     }
 
     public void fightButtonOnClick() {
+        TaskFightDialog tfd = new TaskFightDialog(activity, this.task);
 
+        tfd.setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                fightDialogOnDismiss();
+            }});
+        tfd.show();
+    }
+
+    public void fightDialogOnDismiss() {
+        dismiss();
     }
 
 }

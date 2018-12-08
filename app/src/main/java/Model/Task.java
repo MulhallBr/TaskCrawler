@@ -4,8 +4,10 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -401,5 +403,33 @@ public class Task implements Comparable<Task> {
 
     public static void nukeTable(Context context) {
         AppDatabase.getAppDatabase(context).taskDAO().nukeTable();
+    }
+
+    public long[] complete(Context context) {
+        long experience, gold, level;
+
+        experience = Math.min(420, (long)Math.floor(420.f * (((getTimeUntilDueInSeconds() / (60*60)) * ((getLengthHours()*60) + getLengthMinutes())) / 8640.f)));
+        gold = (long)Math.floor((experience / 420.f) * 69.f);
+        //see if the player levels up
+        SharedPreferences preferences = context.getSharedPreferences("com.games.bad.taskcrawler", Context.MODE_PRIVATE);
+        SharedPreferences.Editor preferences_editor = preferences.edit();
+        long current_level = preferences.getLong("level", 1);
+        long current_experience = preferences.getLong("experience", 0);
+        //experience needed to next level = (<current_level> * 500) * 1.2;
+        if(experience >= (current_level * 500 * 1.25)) {
+            //you leveled up!
+            preferences_editor.putLong("level", current_level+1);
+            preferences_editor.putLong("experience", (long)current_experience - (long)(current_level * 500 * 1.25) );
+            level = current_level+1;
+        }else{
+            //you didnt level up. just add experience.
+            level = 0;
+            preferences_editor.putLong("experience", (long)current_experience);
+        }
+        preferences_editor.putLong("gold", preferences.getLong("gold", 0) + gold);
+
+        this.setTimeLastCompleted(System.currentTimeMillis()/1000);
+        long[] gains = {experience,level,gold};
+        return gains;
     }
 }
