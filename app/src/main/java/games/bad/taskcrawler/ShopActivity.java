@@ -14,7 +14,6 @@ public class ShopActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         Log.d(TAG, "OnCreate");
 
         super.onCreate(savedInstanceState);

@@ -1,8 +1,13 @@
 package games.bad.taskcrawler;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.v4.app.NotificationCompat;
@@ -10,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +26,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -37,16 +45,19 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TaskTapCallback {
 
     // Items needed for a basic notification
-    NotificationCompat.Builder notification;
     private static final int uniqueID = 420111;
+    private static final String CHANNEL_ID = "com.games.bad.taskcrawler.notifx";
 
     private static final String TAG = "MainActivity";
     private DrawerLayout drawer;
     private RecyclerView taskListRecyclerView;
+    private TextView noTaskTextView;
     private TaskListAdapter taskListAdapter;
 
     private Handler taskListUpdateHandler;
     private Runnable taskListUpdateRunnable;
+
+    private TextView playerInfoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +65,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        noTaskTextView = findViewById(R.id.noTaskTextView);
+        playerInfoText = findViewById(R.id.playerInfoText);
+
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Basic notification
-        notification = new NotificationCompat.Builder(this);
-        notification.setAutoCancel(true); // Kills the notification when the activity is created
 
         Weapon.initializeItems(this, this.getResources()); //init the database, if it is not already.
         Icon.initializeItems(this, this.getResources());
@@ -73,6 +84,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         List<Task> tasks = Task.getTasksInOrder(this);
+        if(tasks.size() == 0) {
+            noTaskTextView.setVisibility(View.VISIBLE);
+        }else{
+            noTaskTextView.setVisibility(View.GONE);
+        }
         taskListRecyclerView = findViewById(R.id.task_list_recycler_view);
         taskListAdapter = new TaskListAdapter(tasks, this);
         taskListRecyclerView.setAdapter(taskListAdapter);
@@ -91,6 +107,9 @@ public class MainActivity extends AppCompatActivity
             }
         };
         taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 15000);
+        createNotificationChannel();
+        notificationMethod("YOUR THING IS DUE", "GET IT DONE WOOOEOWOEWOEWWEWOW DO THE THING YOU DUMMY");
+        updatePlayerDataView();
     }
 
     //the task tap callback callback method
@@ -98,12 +117,33 @@ public class MainActivity extends AppCompatActivity
     public void onTaskTapped(Task task){
         //show the dialog
         TaskPromptDialog tpd = new TaskPromptDialog(this, task);
+        tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                updatePlayerDataView();
+            }
+        });
         tpd.show();
     }
 
+    public void updatePlayerDataView() {
+        //updates the visible views that display the player's stats.
+        SharedPreferences preferences = this.getSharedPreferences("com.games.bad.taskcrawler", Context.MODE_PRIVATE);
+        long experience = preferences.getLong("experience", 0);
+        long gold = preferences.getLong("gold", 0);
+        long level = preferences.getLong("level", 1);
+        playerInfoText.setText(String.format("Level: %d, Exp: %d, Gold, %d", experience, gold, level));
+    }
 
     public void updateTaskList() {
-        this.taskListAdapter.updateList(Task.getTasksInOrder(this));
+        List<Task> tasks = Task.getTasksInOrder(this);
+        if(tasks.size() == 0) {
+            noTaskTextView.setVisibility(View.VISIBLE);
+        }else{
+            noTaskTextView.setVisibility(View.GONE);
+        }
+
+        this.taskListAdapter.updateList(tasks);
     }
 
     @Override
@@ -113,6 +153,8 @@ public class MainActivity extends AppCompatActivity
         //check the "Tasks" item when this activity resumes.
         NavigationView nv = (NavigationView) findViewById(R.id.nav_view);
         nv.getMenu().getItem(0).setChecked(true);
+        updateTaskList();
+        updatePlayerDataView();
     }
 
     //we override this method so that if the NavDrawer is open, it doesn't close the app.
@@ -160,26 +202,29 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    // This is just the workings of a basic notification
-    // This needs to be refactored when we actually have the mechanics down,
-    // so we can send a notification whenever a task reaches a certain time left until Due.
-    public void notificationMethod() {
+    //Create a notification channel on API26+, because it needs it to run on those systems.
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
-        // Build the notification
-        notification.setSmallIcon(R.drawable.icon_enemy_elf_archer);
-        notification.setTicker("Your task is due!");
-        notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle("Task Crawler");
-        notification.setContentText("Your task is due!");
+    public void notificationMethod(String title, String content) {
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        notificationBuilder.setSmallIcon(R.drawable.icon_enemy_elf_archer);
+        notificationBuilder.setContentTitle(title);
+        notificationBuilder.setContentText(content);
+        notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentIntent(pendingIntent);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-        // Builds the notification and issues it (sending it out)
-        NotificationManager notManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notManager.notify(uniqueID, notification.build());
+        notificationManager.notify(uniqueID, notificationBuilder.build());
 
     }
 }
