@@ -17,9 +17,21 @@ import games.bad.taskcrawler.R;
 public class Icon extends Item {
     public static String TAG = "ICON";
 
+    @ColumnInfo(name = "icon_type")
+    private int iconType;
 
-    public Icon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased) {
+    public void setIconType(int iconType) {
+        this.iconType = iconType;
+    }
+
+    public int getIconType() {
+        return iconType;
+    }
+
+
+    public Icon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased, int iconType) {
         super(name, iconFilename, cost,requiredLevel,purchased);
+        this.setIconType(iconType);
     }
 
     public static boolean iconExists(Context context, int id) {
@@ -53,18 +65,35 @@ public class Icon extends Item {
         return icons;
     }
 
+    public static List<Icon> getAllPurchasedPlayerIcons(Context context) {
+        List<Icon> icons = AppDatabase.getAppDatabase(context).iconDAO().getAllPurchasedPlayerIcons();
+        return icons;
+    }
+    public static List<Icon> getAllUnpurchasedPlayerIcons(Context context) {
+        List<Icon> icons = AppDatabase.getAppDatabase(context).iconDAO().getAllUnpurchasedPlayerIcons();
+        return icons;
+    }
+    public static List<Icon> getAllPurchasedEnemyIcons(Context context) {
+        List<Icon> icons = AppDatabase.getAppDatabase(context).iconDAO().getAllPurchasedEnemyIcons();
+        return icons;
+    }
+    public static List<Icon> getAllUnpurchasedEnemyIcons(Context context) {
+        List<Icon> icons = AppDatabase.getAppDatabase(context).iconDAO().getAllUnpurchasedEnemyIcons();
+        return icons;
+    }
+
     //static method to initialize all item data.
     public static void initializeItems(Context context, Resources res) {
-        //read the item data from an XML source
-        //insert that data into the sql database if it does not already exist.
-        //if it does, do nothing.
+
+        //if there is data in this table already...
+        if(Icon.getIcons(context).size() != 0) {
+            return; //do not initialize it.
+        }
 
         String[] iconJSON = res.getStringArray(R.array.icons);
 
         Log.d(TAG, "INITIALIZING ITEMS:");
         JSONObject item_json;
-
-        //nuke the table to empty the contents.
 
         for(int i = 0; i < iconJSON.length; i++) {
             try {
@@ -73,6 +102,7 @@ public class Icon extends Item {
 
                 String icon_name = item_json.getString("name");
                 String icon_icon_filename = item_json.getString("icon_filename");
+                int icon_type = item_json.getInt("icon_type");
                 int icon_cost = item_json.getInt("cost");
                 int icon_required_level = item_json.getInt("required_level");
 
@@ -82,7 +112,7 @@ public class Icon extends Item {
                     icon_is_purchased = item_json.getBoolean("purchased");
                 }
 
-                Icon.insertIcon(context, new Icon(icon_name, icon_icon_filename, icon_cost, icon_required_level, icon_is_purchased));
+                Icon.insertIcon(context, new Icon(icon_name, icon_icon_filename, icon_cost, icon_required_level, icon_is_purchased, icon_type));
 
             } catch (JSONException e) { Log.e(TAG, "exception", e);}
         }

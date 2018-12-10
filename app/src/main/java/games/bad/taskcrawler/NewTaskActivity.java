@@ -16,8 +16,6 @@ public class NewTaskActivity extends TaskActivity {
     protected void onInputChanged() {
         super.onInputChanged();
 
-        // If statement in order to make sure that all of the fields are filled out
-        // before allowing the Okay button to be pressed.
         if (    task_title != "" &&
                 task_icon_id != -1 &&
                 length_hour != -1 &&

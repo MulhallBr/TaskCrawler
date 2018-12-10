@@ -9,7 +9,7 @@
     android:background="@android:drawable/dialog_holo_light_frame">
 
     <ImageView
-        android:id="@+id/icon_imageview"
+        android:id="@+id/item_shop_icon"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="8dp"
@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/weapon_1" />
 
     <TextView
-        android:id="@+id/icon_title_textview"
+        android:id="@+id/item_shop_item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,8 +29,8 @@
         android:text="TextView"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_imageview"
-        app:layout_constraintTop_toTopOf="@+id/icon_imageview" />
+        app:layout_constraintStart_toEndOf="@+id/item_shop_icon"
+        app:layout_constraintTop_toTopOf="@+id/item_shop_icon" />
 
     <TextView
         android:id="@+id/itemdescription"
@@ -43,8 +43,8 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/icon_title_textview"
+        app:layout_constraintStart_toEndOf="@+id/item_shop_icon"
+        app:layout_constraintTop_toBottomOf="@+id/item_shop_item_title"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

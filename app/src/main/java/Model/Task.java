@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -137,6 +138,17 @@ public class Task implements Comparable<Task> {
     @ColumnInfo(name = "intervalHours")
     private int intervalHour;
 
+    public long getLastOverdueCheckTime() {
+        return lastOverdueCheckTime;
+    }
+
+    public void setLastOverdueCheckTime(long lastOverdueCheckTime) {
+        this.lastOverdueCheckTime = lastOverdueCheckTime;
+    }
+
+    @ColumnInfo(name = "last_overdue_check_time")
+    private long lastOverdueCheckTime;
+
 
     @ColumnInfo(name = "title")
     private String title; //the title of the task.
@@ -200,6 +212,7 @@ public class Task implements Comparable<Task> {
         this.setIntervalDays(intervalDays);
         this.setIntervalHour(intervalHour);
         this.setTimeLastCompleted(-1); //-1 because this has never been completed before.
+        this.setLastOverdueCheckTime(-1);
     }
 
     public void commit(Context context) {
@@ -235,25 +248,38 @@ public class Task implements Comparable<Task> {
         this.id = id;
     }
 
-    public String getLengthAsString() {
-        return Task.getLengthAsString(this.getLengthHours(), this.getLengthMinutes());
+    public String getLengthAsString(boolean shortMode) {
+        return Task.getLengthAsString(this.getLengthHours(), this.getLengthMinutes(), shortMode);
     }
 
-    public static String getLengthAsString(int hours, int minutes) {
+    public static String getLengthAsString(int hours, int minutes, boolean shortMode) {
         StringBuilder sb = new StringBuilder();
         sb.append("Takes ");
         if(hours > 0) {
-            sb.append(String.format("%d hour", hours));
+            if(shortMode) {
+                sb.append(String.format("%d hr", hours));
+            }else{
+                sb.append(String.format("%d hour", hours));
+            }
             if(hours != 1) {
                 sb.append("s");
             }
         }
         if(hours > 0 && minutes > 0) {
-            sb.append(" and ");
+            if(shortMode) {
+                sb.append(", ");
+            }else{
+                sb.append(" and ");
+
+            }
         }
 
         if(minutes > 0) {
-            sb.append(String.format("%d minute", minutes));
+            if(shortMode) {
+                sb.append(String.format("%d min", minutes));
+            }else{
+                sb.append(String.format("%d minute", minutes));
+            }
             if(minutes != 1) {
                 sb.append("s");
             }
@@ -274,7 +300,7 @@ public class Task implements Comparable<Task> {
 
     public static String getNextOccurrenceAsString(int year, int month, int day, int hour, int minute) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Next occurs ");
+        sb.append("Due ");
 
         Calendar myCalender = Calendar.getInstance();
 
@@ -336,12 +362,14 @@ public class Task implements Comparable<Task> {
         //This gets weird with negative numbers.
         //Fix it.
 
-
         //if its been due for 5 minutes
-        if(due_in_seconds < 0 && due_in_seconds > -(5*60)) {
-            return "Now";
+        if(due_in_seconds <= 0 && due_in_seconds > -(5*60)) {
+            return "now";
+        }else if(due_in_seconds > 0 && due_in_seconds < 61) {
+            return "in a few seconds";
         }
 
+        long due_in_seconds_static = due_in_seconds;
         long due_in_days;
         long due_in_hours;
         long due_in_minutes;
@@ -352,12 +380,12 @@ public class Task implements Comparable<Task> {
         due_in_hours = due_in_seconds / (60 * 60);
         due_in_seconds = due_in_seconds % (60 * 60);
 
-        due_in_minutes = due_in_seconds / (60);
+        due_in_minutes = (due_in_seconds / (60));
 
         StringBuilder sb = new StringBuilder();
 
         if(due_in_days != 0) {
-            sb.append(String.format("%d day", due_in_days));
+            sb.append(String.format("%d day", Math.abs(due_in_days)));
             if(due_in_days != 1) {
                 sb.append("s");
             }
@@ -366,7 +394,7 @@ public class Task implements Comparable<Task> {
         sb.setLength(0);
 
         if(due_in_hours != 0) {
-            sb.append(String.format("%d hour", due_in_hours));
+            sb.append(String.format("%d hour", Math.abs(due_in_hours)));
             if(due_in_hours != 1) {
                 sb.append("s");
             }
@@ -375,7 +403,7 @@ public class Task implements Comparable<Task> {
         sb.setLength(0);
 
         if(due_in_minutes != 0) {
-            sb.append(String.format("%d minute", due_in_minutes));
+            sb.append(String.format("%d minute", Math.abs(due_in_minutes)));
             if(due_in_minutes != 1) {
                 sb.append("s");
             }
@@ -383,53 +411,116 @@ public class Task implements Comparable<Task> {
         String minuteString = sb.toString();
         sb.setLength(0);
 
-        if(due_in_days > 3) { //days are greater than three
+        if(due_in_seconds_static > 0) {
+            sb.append("in ");
+        }
+
+        if(Math.abs(due_in_days) > 3) { //days are greater than three
             sb.append(dayString);
         }else if( due_in_days != 0) { //days are less than or equal to three, but not zero:
             sb.append(dayString);
             sb.append(", ");
             sb.append(hourString);
         }else{ //days are zero
-            if(due_in_hours > 12) {
+            if(Math.abs(due_in_hours) > 12) {
                 sb.append(hourString);
             }else{
-                sb.append(hourString);
-                sb.append(", ");
+                if(Math.abs(due_in_hours) != 0) {
+                    sb.append(hourString);
+                    sb.append(", ");
+                }
                 sb.append(minuteString);
             }
         }
+        if (due_in_seconds_static < -(5 * 60)) {
+            sb.append(" ago");
+        }
         return sb.toString();
+    }
+
+    public long getIntervalInMillis() {
+        return (this.getIntervalDays() * 86400000) + (this.getIntervalHour() * 3600000);
+    }
+
+    public long getNextOccurrenceInMillis() {
+        Calendar timeDueCalendar = Calendar.getInstance();
+        timeDueCalendar.set(Calendar.YEAR, this.getNextOccurrenceYear());
+        timeDueCalendar.set(Calendar.MONTH, this.getNextOccurrenceMonth());
+        timeDueCalendar.set(Calendar.DAY_OF_MONTH, this.getNextOccurrenceDay());
+        timeDueCalendar.set(Calendar.HOUR_OF_DAY, this.getNextOccurrenceHour());
+        timeDueCalendar.set(Calendar.MINUTE, this.getNextOccurrenceMinute());
+        return timeDueCalendar.getTimeInMillis();
     }
 
     public static void nukeTable(Context context) {
         AppDatabase.getAppDatabase(context).taskDAO().nukeTable();
     }
 
-    public long[] complete(Context context) {
-        long experience, gold, level;
-
-        experience = Math.min(420, (long)Math.floor(420.f * (((getTimeUntilDueInSeconds() / (60*60)) * ((getLengthHours()*60) + getLengthMinutes())) / 8640.f)));
-        gold = (long)Math.floor((experience / 420.f) * 69.f);
-        //see if the player levels up
-        SharedPreferences preferences = context.getSharedPreferences("com.games.bad.taskcrawler", Context.MODE_PRIVATE);
-        SharedPreferences.Editor preferences_editor = preferences.edit();
-        long current_level = preferences.getLong("level", 1);
-        long current_experience = preferences.getLong("experience", 0);
-        //experience needed to next level = (<current_level> * 500) * 1.2;
-        if(experience >= (current_level * 500 * 1.25)) {
-            //you leveled up!
-            preferences_editor.putLong("level", current_level+1);
-            preferences_editor.putLong("experience", (long)current_experience - (long)(current_level * 500 * 1.25) );
-            level = current_level+1;
-        }else{
-            //you didnt level up. just add experience.
-            level = 0;
-            preferences_editor.putLong("experience", (long)current_experience);
+    //will tell you how many 5 minute cycles have passed since this task was due :)
+    //upon calling this method, it will update state and start counting cycles from the moment this is called.
+    public long getOverduePeriods(Context context) {
+        long period = 300; //5 minutes in seconds
+        if(this.getTimeUntilDueInSeconds() >= 0) { //its not overdue!
+            return 0;
         }
-        preferences_editor.putLong("gold", preferences.getLong("gold", 0) + gold);
 
+        if(this.getLastOverdueCheckTime() == -1) { //the overdue timer has not been set:
+            this.setLastOverdueCheckTime(this.getNextOccurrenceInMillis() / 1000); //set it to the time when this thing was due.
+        }
+
+        long periodsSinceLastChecked = (long)Math.floor(((System.currentTimeMillis() / 1000) - this.getLastOverdueCheckTime()) / period);
+
+        this.setLastOverdueCheckTime(this.getLastOverdueCheckTime() + (periodsSinceLastChecked * period));
+        this.commit(context);
+
+        return periodsSinceLastChecked;
+    }
+
+    public long complete(Context context) {
+
+        long experience = 30; //base reward
+        long gold = 10; //base gold.
+
+        //randomize the reward a bit.
+        gold += Math.floor(Math.random()*20);
+        experience += Math.floor(Math.random()*50);
+
+        //reward for how long it takes.
+        experience += 2 * ((getLengthHours() * 60) + getLengthMinutes()); //2 xp for every minute spent on the task.
+
+        //give early bonuses.
+        if(getTimeUntilDueInSeconds() > 0) {//if this isn't an overdue task.
+            if(getTimeUntilDueInSeconds() >= 7200) { //2 hours early
+                experience+= 50;
+                gold += 20;
+            }else if(getTimeUntilDueInSeconds() >= 28800) { //8 hours early
+                experience += 200;
+                gold += 50;
+            }else if(getTimeUntilDueInSeconds() >= 86400) { //24 hours early
+                experience += 400;
+                gold += 100;
+            }
+        }
+
+        //long experience = Math.min(420, (long)Math.floor(420.f * (((getTimeUntilDueInSeconds() / (60*60)) * ((getLengthHours()*60) + getLengthMinutes())) / 8640.f)));
+        Player.getPlayer().addExperience(context, experience);
+        Player.getPlayer().addGold(context, gold);
         this.setTimeLastCompleted(System.currentTimeMillis()/1000);
-        long[] gains = {experience,level,gold};
-        return gains;
+
+        //set the next occurrence
+        Calendar nextOccurrenceCalendar = Calendar.getInstance();
+        nextOccurrenceCalendar.setTimeInMillis(getNextOccurrenceInMillis() + getIntervalInMillis());
+
+        setNextOccurrenceYear(nextOccurrenceCalendar.get(Calendar.YEAR));
+        setNextOccurrenceMonth(nextOccurrenceCalendar.get(Calendar.MONTH));
+        setNextOccurrenceDay(nextOccurrenceCalendar.get(Calendar.DAY_OF_MONTH));
+        setNextOccurrenceHour(nextOccurrenceCalendar.get(Calendar.HOUR_OF_DAY));
+        setNextOccurrenceMinute(nextOccurrenceCalendar.get(Calendar.MINUTE));
+
+        this.setLastOverdueCheckTime(-1);
+
+        this.commit(context);
+
+        return experience;
     }
 }

@@ -34,11 +34,40 @@
 
     <string-array name="icons">
         <item>
+            {\"icon_filename\":\"@drawable/main_character_1_with_bg\",
+            \"purchased\": true,
+            \"icon_type\": 1,
+            \"name\":\"Normal girl\",
+            \"cost\":15,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_2_with_bg\",
+            \"purchased\": true,
+            \"icon_type\": 1,
+            \"name\":\"Winking girl ;)\",
+            \"cost\":0,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_3_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Angry girl >:(\",
+            \"cost\":60,
+            \"required_level\":0}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_4_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Very angry girl >:0\",
+            \"cost\":250,
+            \"required_level\":5}
+        </item>
+        <item>
             {\"icon_filename\":\"@drawable/icon_enemy_elf_archer\",
             \"purchased\": true,
             \"icon_type\": 0,
             \"name\":\"Elf archer\",
-            \"icon_id\": 0,
             \"cost\":0,
             \"required_level\":0}
         </item>
@@ -47,7 +76,6 @@
             \"purchased\": true,
             \"icon_type\": 0,
             \"name\":\"Elf ranger\",
-            \"icon_id\": 0,
             \"cost\":0,
             \"required_level\":0}
         </item>
@@ -56,7 +84,6 @@
             \"purchased\": true,
             \"icon_type\": 0,
             \"name\":\"Elf paladin\",
-            \"icon_id\": 0,
             \"cost\":0,
             \"required_level\":0}
         </item>
@@ -65,7 +92,6 @@
             \"purchased\": false,
             \"icon_type\": 0,
             \"name\":\"Goblin ranger\",
-            \"icon_id\": 0,
             \"cost\":5,
             \"required_level\":0}
         </item>

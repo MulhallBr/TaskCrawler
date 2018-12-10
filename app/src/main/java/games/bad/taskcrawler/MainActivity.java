@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -25,6 +24,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.util.Log;
@@ -33,6 +34,7 @@ import java.util.List;
 import Adapters.TaskListAdapter;
 import Interfaces.TaskTapCallback;
 import Model.Icon;
+import Model.Player;
 import Model.Task;
 import Model.Weapon;
 
@@ -45,8 +47,10 @@ public class MainActivity extends AppCompatActivity
     private static final int uniqueID = 420111;
     private static final String CHANNEL_ID = "com.games.bad.taskcrawler.notifx";
 
-    private DrawerLayout drawer;
-
+    private static final String TAG = "MainActivity";
+    private DrawerLayout drawerLayout;
+    private RecyclerView taskListRecyclerView;
+    
     private TextView noTaskTextView;
     private TextView playerInfoText;
 
@@ -54,6 +58,15 @@ public class MainActivity extends AppCompatActivity
     private TaskListAdapter taskListAdapter;
     private Handler taskListUpdateHandler;
     private Runnable taskListUpdateRunnable;
+    private NavigationView navigationView;
+    private Toolbar toolbarLayout;
+
+    private TextView playerInfoText;
+    private LinearLayout drawerHeaderContainer;
+
+    private TextView drawerPlayerInfoText;
+    private ImageView equippedWeaponImageView;
+    private ImageView playerIconImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +78,27 @@ public class MainActivity extends AppCompatActivity
 
         noTaskTextView = findViewById(R.id.noTaskTextView);
         playerInfoText = findViewById(R.id.playerInfoText);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigationView);
+        toolbarLayout = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbarLayout);
 
-        drawer = findViewById(R.id.drawer_layout);
+        playerIconImageView = findViewById(R.id.playerIconImageView);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        equippedWeaponImageView = findViewById(R.id.equippedWeaponImageView);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        drawerHeaderContainer = findViewById(R.id.drawerHeaderContainer);
+
+        //drawerPlayerInfoText = drawerHeaderContainer.findViewById(R.id.playerInfoText);
 
         Weapon.initializeItems(this, this.getResources());  // Initialize the database,
         Icon.initializeItems(this, this.getResources());    // if it hasn't been done already.
 
+
         // Toggles the name of the action bar based on whether or not the  navigation drawer is open.
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbarLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -108,16 +127,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 updateTaskList();
-                taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 15000); // 15000
+
+                taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 5000); //15000
             }
         };
+        taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 5000);
+        createNotificationChannel(); // Create the notification channel so this app can do noticiations on OREO+
+        //notificationMethod("YOUR THING IS DUE", "GET IT DONE. DO THE THING YOU DUMMY");
+        updatePlayerDataView(); // Display player information.
 
-        taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 15000);
-
-        createNotificationChannel();                                                    // NOTIFICATION CHANNEL
-        notificationMethod("YOUR THING IS DUE", "GET IT DONE YOU DUMMY!"); // NOTIFICATION
-
-        updatePlayerDataView();
     }
 
     // The task tap callback method.
@@ -131,6 +149,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDismiss(DialogInterface dialog) {
                 updatePlayerDataView();
+                updateTaskList();
             }
         });
 
@@ -139,16 +158,26 @@ public class MainActivity extends AppCompatActivity
 
     // Method in order to update the Player's different stats, displayed at the top of the screen.
     public void updatePlayerDataView() {
-
+    
         // Updates the views that display the player's stats.
-        SharedPreferences preferences = this.getSharedPreferences("com.games.bad.taskcrawler", Context.MODE_PRIVATE);
+        if(Player.getPlayer().getEquippedIconId(this) != -1) {
+            Icon playerIcon = Icon.getIcon(this, (int)Player.getPlayer().getEquippedIconId(this));
+            playerIconImageView.setImageResource(this.getResources().getIdentifier(playerIcon.getIconFilename(), "drawable", this.getApplicationContext().getPackageName()));
+        }
 
-        // Each of the players (initial?) stats.
-        long level = preferences.getLong("level", 1);           // PLAYER LEVEL
-        long experience = preferences.getLong("experience", 0); // PLAYER EXP
-        long gold = preferences.getLong("gold", 15);            // PLAYER GOLD
+        if(Player.getPlayer().getEquippedWeaponId(this) != -1) {
+            equippedWeaponImageView.setImageResource(this.getResources().getIdentifier(Weapon.getWeapon(getBaseContext(), (int)Player.getPlayer().getEquippedWeaponId(getBaseContext())).getIconFilename(), "drawable", this.getApplicationContext().getPackageName()));
+        }else{
+            //equippedWeaponImageView.setImageResource(0);
+        }
 
-        playerInfoText.setText(String.format("Level: %d, Exp: %d, Gold, %d", level, experience, gold));
+        String text = String.format("Level: %d, Exp: %d, Gold, %d",
+                Player.getPlayer().getLevel(this),      // PLAYER LEVEL
+                Player.getPlayer().getExperience(this), // PLAYER EXP
+                Player.getPlayer().getGold(this));      // PLATER GOLD
+        playerInfoText.setText(text);
+
+        //drawerPlayerInfoText.setText("oops");
     }
 
     // Method in order to update the task list, whenever editing, deleting or adding a task.
@@ -156,7 +185,15 @@ public class MainActivity extends AppCompatActivity
         // Place all of the Task objects into a list.
         List<Task> tasks = Task.getTasksInOrder(this);
 
-        if (tasks.size() == 0) {
+        for (Task task : tasks) {
+            long overdueCycles = task.getOverduePeriods(this);
+            if (overdueCycles > 0) {
+                //Snackbar.make(playerIconImageView, String.format("EE: %d", overdueCycles), Toast.LENGTH_LONG).show();
+                Player.getPlayer().addExperience(this, overdueCycles * - 5); //you lose 5xp for every period you leave each task overdue.
+            }
+        }
+
+        if(tasks.size() == 0) {
             // If there are no tasks, show the text view prompting the user to add new tasks.
             noTaskTextView.setVisibility(View.VISIBLE);
         } else {
@@ -165,6 +202,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         this.taskListAdapter.updateList(tasks);
+        updatePlayerDataView();
     }
 
     // We override this method in order to make certain updates.
@@ -175,8 +213,7 @@ public class MainActivity extends AppCompatActivity
         taskListAdapter.updateList(Task.getTasksInOrder(this));
 
         // Check the "Tasks" item when the MainActivity resumes.
-        NavigationView nv = findViewById(R.id.nav_view);
-        nv.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         // Update the task list and the player's stats.
         updateTaskList();
@@ -187,13 +224,10 @@ public class MainActivity extends AppCompatActivity
     // it won't close the app if the back button is pressed.
     @Override
     public void onBackPressed() {
-
-        Log.d(TAG, "OnBackPressed"); // Logcat print item for debugging
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        Log.d(TAG, "OnBackPressed"); // Logcat print item for debugging.
+        
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -238,7 +272,7 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(myIntent);
         }
 
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,8 +66,8 @@ public class IconSelectListAdapter extends RecyclerView.Adapter<IconSelectListAd
 
         ViewHolder(View itemView) {
             super(itemView);
-            icon_imageview = itemView.findViewById( R.id.icon_imageview);
-            icon_textview = itemView.findViewById(R.id.icon_title_textview);
+            icon_imageview = itemView.findViewById( R.id.item_shop_icon);
+            icon_textview = itemView.findViewById(R.id.item_shop_item_title);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

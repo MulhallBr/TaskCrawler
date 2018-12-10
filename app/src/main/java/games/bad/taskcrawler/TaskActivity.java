@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -85,13 +86,22 @@ public abstract class TaskActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         okayButton = findViewById(R.id.okayButton);
 
-        iconImageView = findViewById(R.id.icon_imageview);
+        iconImageView = findViewById(R.id.item_shop_icon);
         iconTextView = findViewById(R.id.icon_titleview);
 
         lengthTextView = findViewById(R.id.lengthTextView);
 
         firstOccurrenceTextView = findViewById(R.id.firstOcurranceTextView);
         recurrenceTextView = findViewById(R.id.recurranceTextView);
+
+        final Calendar myCalender = Calendar.getInstance();
+
+        next_occurrence_year = myCalender.get(Calendar.YEAR);
+        next_occurrence_month = myCalender.get(Calendar.MONTH);
+        next_occurrence_day = myCalender.get(Calendar.DAY_OF_MONTH);
+        next_occurrence_hour = myCalender.get(Calendar.HOUR_OF_DAY);
+        next_occurrence_minute = myCalender.get(Calendar.MINUTE);
+
 
         taskNameInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -184,7 +194,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     protected void updateLengthTextView() {
-        lengthTextView.setText(Task.getLengthAsString(length_hour, length_minute));
+        lengthTextView.setText(Task.getLengthAsString(length_hour, length_minute, false));
         onInputChanged();
     }
 
@@ -275,26 +285,34 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private void showFirstTimeTimePickerDialog(final int dp_year, final int dp_month, final int dp_dayOfMonth) {
-        final Calendar myCalender = Calendar.getInstance();
 
         // Define the Time Picker Dialog
         final TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int tp_hour, int tp_minute) {
                 if (view.isShown()) {
-                    next_occurrence_year = dp_year;
-                    next_occurrence_month = dp_month;
-                    next_occurrence_day = dp_dayOfMonth;
-                    next_occurrence_hour = tp_hour;
-                    next_occurrence_minute = tp_minute;
-
-                    updateFirstTimeTextView();
+                    Calendar myCal = Calendar.getInstance();
+                    myCal.set(Calendar.YEAR, dp_year);
+                    myCal.set(Calendar.MONTH, dp_month);
+                    myCal.set(Calendar.DAY_OF_MONTH, dp_dayOfMonth);
+                    myCal.set(Calendar.HOUR_OF_DAY, tp_hour);
+                    myCal.set(Calendar.MINUTE, tp_minute);
+                    if( myCal.getTimeInMillis() - System.currentTimeMillis() > 0) {
+                        next_occurrence_year = dp_year;
+                        next_occurrence_month = dp_month;
+                        next_occurrence_day = dp_dayOfMonth;
+                        next_occurrence_hour = tp_hour;
+                        next_occurrence_minute = tp_minute;
+                        updateFirstTimeTextView();
+                    }else{
+                        Snackbar.make(recurrenceSelectLayout, "Cannot set time to the past!", Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         };
-
-        // WHY IS THIS NOT 24 HOURS?!?!?!?!??!!?
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, myTimeListener, myCalender.get(Calendar.HOUR), myCalender.get(Calendar.MINUTE), false);
+        
+        //WHY IS THIS NOT 24 HOURS?!?!?!?!??!!?
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, myTimeListener, next_occurrence_hour, next_occurrence_minute, false);
         timePickerDialog.setTitle("What time will it start?\n(HH:MM)");
         timePickerDialog.show();
     }
@@ -309,7 +327,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             }
         };
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, myCalender.get(Calendar.YEAR), myCalender.get(Calendar.MONTH), myCalender.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, next_occurrence_year, next_occurrence_month, next_occurrence_day);
         datePickerDialog.setTitle("Which day will it start?");
         datePickerDialog.show();
     }
@@ -326,7 +344,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             }
         };
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, myTimeListener, 0, 30, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, myTimeListener, length_hour, length_minute, true);
         timePickerDialog.setTitle("How long will it take?\n(HH:MM)");
         timePickerDialog.show();
     }

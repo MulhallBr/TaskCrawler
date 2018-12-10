@@ -52,12 +52,26 @@ public class Weapon extends Item {
     @ColumnInfo(name = "gold_boost")
     private int goldBoost; //the item description.
 
+    public boolean purchase(Context context) {
+        if(Player.getPlayer().getGold(context) >= this.getCost()) {
+            Player.getPlayer().addGold(context,0 - this.getCost()); //reduce that number of coins
+            this.setPurchased(true);
+            this.commit(context);
+            return true;
+        }
+        return false;
+    }
+
 
     public Weapon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased, String description, int xpBoost, int goldBoost) {
         super(name, iconFilename, cost,requiredLevel,purchased);
         this.setDescription(description);
         this.setXpBoost(xpBoost);
         this.setGoldBoost(goldBoost);
+    }
+
+    public static Weapon getWeapon(Context context, int id) {
+        return AppDatabase.getAppDatabase(context).weaponDAO().getWeaponById(id);
     }
 
     public static boolean itemExists(Context context, int id) {
@@ -82,11 +96,28 @@ public class Weapon extends Item {
         return weapons;
     }
 
+    public static List<Weapon> getAllUnpurchasedWeapons(Context context) {
+        List<Weapon> weapons = AppDatabase.getAppDatabase(context).weaponDAO().getAllUnpurchasedWeapons();
+        return weapons;
+    }
+
+    public static List<Weapon> getAllPurchasedWeapons(Context context) {
+        List<Weapon> weapons = AppDatabase.getAppDatabase(context).weaponDAO().getAllPurchasedWeapons();
+        return weapons;
+    }
+
+    public static void nukeTable(Context context) {
+        AppDatabase.getAppDatabase(context).weaponDAO().nukeTable();
+
+    }
+
     //static method to initialize all item data.
     public static void initializeItems(Context context, Resources res) {
-        //read the item data from an XML source
-        //insert that data into the sql database if it does not already exist.
-        //if it does, do nothing.
+
+        //if there is data in this table already...
+        if(Weapon.getWeapons(context).size() != 0) {
+            return; //do not initialize it.
+        }
 
         String[] weaponsJson = res.getStringArray(R.array.weapons);
 

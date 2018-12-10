@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
+import Model.AppDatabase;
+import Model.Icon;
+import Model.Player;
+import Model.Weapon;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -54,6 +59,18 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Method to reset all player data and clear the database to default settings.
     private void resetData() {
+        //WIPE USER PREFERENCES/STATS
+        //Player.getPlayer().reset(this);
+
+        AppDatabase.getAppDatabase(this).taskDAO().nukeTable();
+        AppDatabase.getAppDatabase(this).weaponDAO().nukeTable();
+        AppDatabase.getAppDatabase(this).iconDAO().nukeTable();
+        //AppDatabase.getAppDatabase(this).consumableDAO().nukeTable();
+
+        //then, re-init the database. This will have to be a method inside each item class.
+        Weapon.initializeItems(this, this.getResources());
+        Icon.initializeItems(this, this.getResources());
+
     }
 
 

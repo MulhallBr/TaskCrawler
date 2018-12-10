@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import Model.Player;
 import Model.Task;
 
 public class TaskFightDialog extends Dialog {
@@ -17,8 +18,8 @@ public class TaskFightDialog extends Dialog {
     private Task task;
     private Button okayButton;
     private TextView experienceTextView, goldTextView, levelTextView;
-    private ConstraintLayout itemView;
     private ImageView taskIconView;
+    private ImageView levelUpImageView;
 
     private int experienceGained, goldGained, levelGained;
 
@@ -28,8 +29,6 @@ public class TaskFightDialog extends Dialog {
         this.task = task;
 
         //task.complete();
-
-
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,11 @@ public class TaskFightDialog extends Dialog {
         experienceTextView = findViewById(R.id.experienceTextView);
         goldTextView = findViewById(R.id.goldTextView);
         levelTextView = findViewById(R.id.levelTextView);
-        itemView = findViewById(R.id.itemView);
         taskIconView = findViewById(R.id.iconImageView);
+        levelUpImageView = findViewById(R.id.levelUpImageView);
+
+        levelTextView.setVisibility(View.GONE);
+        levelUpImageView.setVisibility(View.GONE);
 
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,19 +55,24 @@ public class TaskFightDialog extends Dialog {
         fillViews();
     }
 
+    public void fillViews() {
+        long oldLevel, oldGold;
+        oldLevel = Player.getPlayer().getLevel(activity);
+        oldGold = Player.getPlayer().getGold(activity);
+        long experience_gained = this.task.complete(activity);
+        long goldGained = Player.getPlayer().getGold(activity) - oldGold;
+        long levelGained = Player.getPlayer().getLevel(activity) - oldLevel;
 
-    private void fillViews() {
         taskIconView.setImageResource(this.task.getIconResourceId(activity, activity.getResources()));
-        long[] gains = this.task.complete(activity);
-
-        experienceTextView.setText(String.format("+ %dxp", gains[0]));
-        if (gains[1] != 0) {
-            levelTextView.setText(String.format("Leveled up to level %d", gains[1]));
-        } else {
-            // Hide these views
+        experienceTextView.setText(String.format("+ %d experience", experience_gained));
+        if(goldGained > 0) {
+            goldTextView.setText(String.format("+ %d gold", goldGained));
         }
-        goldTextView.setText(String.format("+ %d gold", gains[2]));
-
+        if(levelGained > 0) {
+            levelUpImageView.setVisibility(View.VISIBLE);
+            levelTextView.setVisibility(View.VISIBLE);
+            levelTextView.setText(String.format("Leveled up to level %d", Player.getPlayer().getLevel(activity)));
+        }
     }
 
     private void okayButtonOnClick() {
