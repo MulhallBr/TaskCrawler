@@ -21,6 +21,7 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onInputChanged() {
         super.onInputChanged();
+
         if(     task_title != "" &&
                 task_icon_id != -1 &&
                 length_hour != -1 &&

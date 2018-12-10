@@ -23,7 +23,7 @@ public class IconSelectActivity extends AppCompatActivity {
         }
 
         //get all icons from the database
-        List<Icon> icons = Icon.getAllPurchasedIcons(this);
+        List<Icon> icons = Icon.getAllPurchasedEnemyIcons(this);
 
         //fill the recyclerview with the items! using the default itemListAdapter.
         RecyclerView iconRecyclerView = findViewById(R.id.iconRecyclerView);

@@ -17,5 +17,7 @@
 
     <color name="warningPrimary">#ff5131</color>
 
+    <color name="overdue">#ffd3d3</color>
+
 
 </resources>

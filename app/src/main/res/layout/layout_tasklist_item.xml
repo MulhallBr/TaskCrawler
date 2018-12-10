@@ -10,16 +10,16 @@
 
     <ImageView
         android:id="@+id/taskicon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/icon_enemy_elf_paladin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tasktitle"
@@ -29,23 +29,64 @@
         android:layout_marginEnd="8dp"
         android:singleLine="false"
         android:text="The name of the task"
-        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/taskicon"
         app:layout_constraintTop_toTopOf="@+id/taskicon" />
 
     <TextView
-        android:id="@+id/taskinfo"
-        android:layout_width="0dp"
+        android:id="@+id/tasklength"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:maxWidth="128sp"
+        android:scrollHorizontally="false"
+        android:text="Takes however long"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/tasktitle" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="24sp"
+        android:layout_height="24sp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:singleLine="false"
-        android:text="takes 5 minutes, due in 8 hours"
+        android:alpha="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/taskicon"
-        app:layout_constraintTop_toBottomOf="@+id/tasktitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tasktitle"
+        app:srcCompat="@drawable/baseline_access_alarm_black_18dp" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="24sp"
+        android:layout_height="24sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:alpha="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tasklength"
+        app:layout_constraintTop_toBottomOf="@+id/tasktitle"
+        app:srcCompat="@drawable/baseline_calendar_today_black_18dp" />
+
+    <TextView
+        android:id="@+id/taskdatedue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="8dp"
+        android:text="Due whenever"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
 </android.support.constraint.ConstraintLayout>

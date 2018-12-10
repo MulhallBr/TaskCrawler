@@ -45,8 +45,8 @@ public class TaskPromptDialog extends Dialog {
 
         iconImageView.setImageResource(task.getIconResourceId(activity, activity.getResources()));
         titleTextView.setText(task.getTitle());
-        lengthTextView.setText(task.getLengthAsString());
-        nextOccurrenceTextView.setText(task.getNextOccurrenceAsString() + " _ " + Long.toString(task.complete(activity)[0]) + " _ " + Long.toString(task.complete(activity)[1]));
+        lengthTextView.setText(task.getLengthAsString(false));
+        nextOccurrenceTextView.setText(task.getNextOccurrenceAsString());
         intervalTextView.setText(task.getIntervalAsString(true));
 
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -76,17 +76,7 @@ public class TaskPromptDialog extends Dialog {
 
     public void fightButtonOnClick() {
         TaskFightDialog tfd = new TaskFightDialog(activity, this.task);
-
-        tfd.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                fightDialogOnDismiss();
-            }});
         tfd.show();
+        dismiss(); //dismiss this dialog so it isn't sitting behind the new one.
     }
-
-    public void fightDialogOnDismiss() {
-        dismiss();
-    }
-
 }

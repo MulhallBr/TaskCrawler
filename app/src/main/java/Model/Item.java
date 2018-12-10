@@ -1,5 +1,6 @@
 package Model;
 
+import android.app.Activity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -58,6 +59,10 @@ public class Item {
 
     public void setRequiredLevel(int requiredLevel) {
         this.requiredLevel = requiredLevel;
+    }
+
+    public int getIconResourceId(Activity activity) {
+        return activity.getResources().getIdentifier(this.getIconFilename(), "drawable", activity.getPackageName());
     }
 
     @PrimaryKey(autoGenerate = true)
