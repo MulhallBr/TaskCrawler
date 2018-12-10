@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShopActivity" android:label="@string/shop_name">
+        <activity
+            android:name=".ShopActivity"
+            android:label="@string/shop_name">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -31,8 +33,7 @@
         <activity android:name=".DayHourPickerDialog" />
         <activity android:name=".IconSelectActivity" android:label="Icon Select"/>
         <activity android:name=".SettingsActivity" android:label="Settings"/>
-        <activity android:name=".AboutActivity" android:label="About">
-        </activity>
+        <activity android:name=".AboutActivity" android:label="About"/>
     </application>
 
 </manifest>

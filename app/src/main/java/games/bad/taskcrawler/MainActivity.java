@@ -41,8 +41,6 @@ import Model.Weapon;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TaskTapCallback {
 
-    private static final String TAG = "MainActivity";
-
     // Constants needed for a basic notification
     private static final int uniqueID = 420111;
     private static final String CHANNEL_ID = "com.games.bad.taskcrawler.notifx";
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private Toolbar toolbarLayout;
 
-    private TextView playerInfoText;
     private LinearLayout drawerHeaderContainer;
 
     private TextView drawerPlayerInfoText;
