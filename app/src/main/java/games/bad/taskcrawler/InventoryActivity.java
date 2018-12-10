@@ -18,18 +18,20 @@ public class InventoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.d(TAG, "OnCreate");
+        Log.d(TAG, "IconOnCreate"); // Logcat print for debugging.
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        List<Weapon> weapons = Weapon.getWeapons(this); //get all items from the db
+        // Grab all of the weapons from the database.
+        List<Weapon> weapons = Weapon.getWeapons(this);
 
-        //fill the recyclerview with the items! using the default itemListAdapter.
+        // Fill the RecyclerView with all of the items, using the default itemListAdapter.
         RecyclerView weaponRecyclerView = findViewById(R.id.weapon_recyclerview);
         WeaponSelectListAdapter weaponSelectListAdapter = new WeaponSelectListAdapter(weapons, this);
         weaponRecyclerView.setAdapter(weaponSelectListAdapter);

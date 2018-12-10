@@ -14,12 +14,14 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         Switch notifications = findViewById(R.id.switch_notifications);
-        Boolean notifiSwitchState = notifications.isChecked();
+        Boolean notifiSwitchState = notifications.isChecked();  // Check to see if the notifications are on or off.
+                                                                // ... it doesn't do anything yet.
 
         Button reset = findViewById(R.id.btn_reset_data);
         reset.setOnClickListener(new View.OnClickListener() {
@@ -44,11 +46,13 @@ public class SettingsActivity extends AppCompatActivity {
         return true;
     }
 
+    // Launch a new activity to show the About app and developers page.
     private void aboutDevelopers() {
         Intent myIntent = new Intent(SettingsActivity.this, AboutActivity.class);
         SettingsActivity.this.startActivity(myIntent);
     }
 
+    // Method to reset all player data and clear the database to default settings.
     private void resetData() {
     }
 

@@ -17,15 +17,15 @@ public class IconSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_icon_select);
 
-        //enable the back button in the action bar.
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //get all icons from the database
+        // Grab all of the icons from the database
         List<Icon> icons = Icon.getAllPurchasedIcons(this);
 
-        //fill the recyclerview with the items! using the default itemListAdapter.
+        // Fill the RecyclerView with the icons, using the default itemListAdapter.
         RecyclerView iconRecyclerView = findViewById(R.id.iconRecyclerView);
         IconSelectListAdapter iconSelectListAdapter = new IconSelectListAdapter(icons, this);
         iconRecyclerView.setAdapter(iconSelectListAdapter);

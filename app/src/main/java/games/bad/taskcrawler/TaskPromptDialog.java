@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -16,13 +15,12 @@ import Model.Task;
 
 public class TaskPromptDialog extends Dialog {
     private Activity activity;
-    private Dialog dialog;
     private Button editButton, fightButton;
     private ImageView iconImageView;
     private TextView titleTextView, lengthTextView, nextOccurrenceTextView, intervalTextView;
     private Task task;
 
-    public TaskPromptDialog(Activity act, Task task) {
+    TaskPromptDialog(Activity act, Task task) {
         super(act);
         activity = act;
         this.task = task;
@@ -51,30 +49,30 @@ public class TaskPromptDialog extends Dialog {
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 editButtonOnClick();
-                dismiss();// this is necessary, because if the user deletes the task, the app will crash if it comes back to this activty trying to modify the non-existent task.
+                dismiss();  // This is necessary, because if the user deletes the task,
+                            // the app will crash if it comes back to this activity trying to modify the non-existent task.
             }
         });
 
         fightButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 fightButtonOnClick();
-
             }
         });
 
     }
 
-    public void editButtonOnClick() {
+    private void editButtonOnClick() {
         Intent myIntent = new Intent(activity, EditTaskActivity.class);
         myIntent.putExtra("task_id", this.task.getId());
         activity.startActivity(myIntent);
         //dismiss();
     }
 
-    public void fightButtonOnClick() {
+    private void fightButtonOnClick() {
         TaskFightDialog tfd = new TaskFightDialog(activity, this.task);
 
         tfd.setOnDismissListener(new OnDismissListener() {
@@ -85,7 +83,7 @@ public class TaskPromptDialog extends Dialog {
         tfd.show();
     }
 
-    public void fightDialogOnDismiss() {
+    private void fightDialogOnDismiss() {
         dismiss();
     }
 

@@ -1,6 +1,5 @@
 package games.bad.taskcrawler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import Model.Icon;
 import Model.Task;
@@ -29,27 +27,30 @@ import Model.Task;
 /*
     This is the base-class for both EditTaskActivity and NewTaskActivity. It is responsible for filling
     common functionality between both activities, as they are both similar.
-    Do not attempt to call this class on its own, however. It servers no purpose by itself.
- */
+    Do not attempt to call this class on its own, however. It serves no purpose by itself.
+*/
 
 public abstract class TaskActivity extends AppCompatActivity {
     private static String TAG = "TASK_ACTIVITY";
+
     public TextView taskNameInput;
+
     protected ConstraintLayout iconSelectLayout;
     protected ConstraintLayout lengthSelectLayout;
     protected ConstraintLayout firstTimeSelectLayout;
     protected ConstraintLayout recurrenceSelectLayout;
+
     protected Button backButton;
     protected Button okayButton;
 
     protected TextView lengthTextView;
-    protected TextView firstOcurranceTextView;
-    protected TextView recurranceTextView;
+    protected TextView firstOccurrenceTextView;
+    protected TextView recurrenceTextView;
 
     protected ImageView iconImageView;
     protected TextView iconTextView;
 
-    protected String task_title = "";
+    protected String task_title = null;
 
     protected int task_icon_id = -1;
 
@@ -70,9 +71,8 @@ public abstract class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
-        Activity activity = this;
 
-        //enable the Back arrow in the Action Bar:
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -90,8 +90,8 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         lengthTextView = findViewById(R.id.lengthTextView);
 
-        firstOcurranceTextView = findViewById(R.id.firstOcurranceTextView);
-        recurranceTextView = findViewById(R.id.recurranceTextView);
+        firstOccurrenceTextView = findViewById(R.id.firstOcurranceTextView);
+        recurrenceTextView = findViewById(R.id.recurranceTextView);
 
         taskNameInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -109,7 +109,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         iconSelectLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(TaskActivity.this, IconSelectActivity.class);
                 startActivityForResult(intent, 420);
             }
@@ -117,28 +117,29 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         lengthSelectLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 showTimePickerDialog();
             }
         });
 
         firstTimeSelectLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showFirstTimeDatePickerDialog(); //this will open the date picker, and then the Time picker and finally set values in the activity state.
+            public void onClick(View view) {
+                showFirstTimeDatePickerDialog();    // This will open the Date picker, and then the Time picker
+                                                    // and finally set values in the activity state.
             }
         });
 
         recurrenceSelectLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 showRecurrencePickerDialog();
             }
         });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 onBackButtonPressed();
             }
         });
@@ -146,7 +147,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 onOkayButtonPressed();
             }
         });
@@ -155,14 +156,16 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "Results returned!!!!!");
-        if (requestCode == 420) {
-            if (resultCode == RESULT_OK) {
-                task_icon_id = data.getIntExtra("icon_id", -1);
-                if(task_icon_id != -1) {
-                    updateIconImageView();
-                }
+    public void onActivityResult(int requestCode, int resultCodeTwo, Intent data) {
+
+        Log.d(TAG, "Results returned!!!!!"); // Logcat print for debugging
+
+        if (requestCode == 420 && resultCodeTwo == RESULT_OK) {
+
+            task_icon_id = data.getIntExtra("icon_id", -1);
+
+            if (task_icon_id != -1) {
+                updateIconImageView();
             }
         }
     }
@@ -176,9 +179,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     protected void updateRecurrenceTextView() {
-
-        recurranceTextView.setText(Task.getIntervalAsString(interval_days, interval_hours, true));
-
+        recurrenceTextView.setText(Task.getIntervalAsString(interval_days, interval_hours, true));
         onInputChanged();
     }
 
@@ -188,7 +189,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     protected void updateFirstTimeTextView() {
-        firstOcurranceTextView.setText(Task.getNextOccurrenceAsString(next_occurrence_year, next_occurrence_month, next_occurrence_day, next_occurrence_hour, next_occurrence_minute));
+        firstOccurrenceTextView.setText(Task.getNextOccurrenceAsString(next_occurrence_year, next_occurrence_month, next_occurrence_day, next_occurrence_hour, next_occurrence_minute));
         onInputChanged();
     }
 
@@ -199,21 +200,21 @@ public abstract class TaskActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.day_hour_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        final NumberPicker dayNumberPicker = (NumberPicker) dialogView.findViewById(R.id.dayPicker);
+        final NumberPicker dayNumberPicker = dialogView.findViewById(R.id.dayPicker);
         dayNumberPicker.setMinValue(0);
         dayNumberPicker.setMaxValue(365);
         dayNumberPicker.setValue(2);
 
-        final NumberPicker hourNumberPicker = (NumberPicker) dialogView.findViewById(R.id.hourPicker);
+        final NumberPicker hourNumberPicker = dialogView.findViewById(R.id.hourPicker);
         hourNumberPicker.setMinValue(0);
         hourNumberPicker.setMaxValue(23);
         hourNumberPicker.setValue(3);
 
-        final TextView recurTitle = (TextView) dialogView.findViewById(R.id.recurTitle);
-        final TextView upperTitle = (TextView) dialogView.findViewById(R.id.titleTextView);
+        final TextView recurTitle = dialogView.findViewById(R.id.recurTitle);
+        final TextView upperTitle = dialogView.findViewById(R.id.titleTextView);
 
-        Button rpCancelButton = (Button) dialogView.findViewById(R.id.cancelButton);
-        Button rpOkayButton = (Button) dialogView.findViewById(R.id.okayButton);
+        Button rpCancelButton = dialogView.findViewById(R.id.cancelButton);
+        Button rpOkayButton = dialogView.findViewById(R.id.okayButton);
 
 
         class TitleUpdateInterface {
@@ -248,7 +249,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         rpOkayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 interval_days = dayNumberPicker.getValue();
                 interval_hours = hourNumberPicker.getValue();
                 alertDialog.cancel();
@@ -258,7 +259,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         rpCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 alertDialog.dismiss();
             }
         });
@@ -276,7 +277,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     private void showFirstTimeTimePickerDialog(final int dp_year, final int dp_month, final int dp_dayOfMonth) {
         final Calendar myCalender = Calendar.getInstance();
 
-        //Define the Time Picker Dialog
+        // Define the Time Picker Dialog
         final TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int tp_hour, int tp_minute) {
@@ -291,8 +292,8 @@ public abstract class TaskActivity extends AppCompatActivity {
                 }
             }
         };
-        //WHY IS THIS NOT 24 HOURS?!?!?!?!??!!?
 
+        // WHY IS THIS NOT 24 HOURS?!?!?!?!??!!?
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, myTimeListener, myCalender.get(Calendar.HOUR), myCalender.get(Calendar.MINUTE), false);
         timePickerDialog.setTitle("What time will it start?\n(HH:MM)");
         timePickerDialog.show();
@@ -338,9 +339,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         finish();
     }
 
-    //called any time the user changes an input value
+    // Called any time the user changes an input value
     protected void onInputChanged() {
-
+        // Override in child classes ?
     }
 
     @Override

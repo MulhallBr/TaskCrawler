@@ -19,18 +19,21 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //Item.initializeItems(this, this.getResources()); //fill the database with initial data if the db is not already full.
-        List<Weapon> weapons = Weapon.getWeapons(this); //get all the items from the database.
+        //Item.initializeItems(this, this.getResources());  // Fill the database with initial data if the db is not already full.
+        List<Weapon> weapons = Weapon.getWeapons(this); // Grab all of the weapons from the database.
 
-        //fill the recycler view with the data from the Items.
-        /*RecyclerView weaponShopListRecyclerView = findViewById(R.id.item_recyclerview);
+        // Fill the RecyclerView with the data from the Items.
+        /*
+        RecyclerView weaponShopListRecyclerView = findViewById(R.id.item_recyclerview);
         ShopItemListAdapter shopItemListRecyclerViewAdapter = new ShopItemListAdapter(items, this);
         shopListRecyclerView.setAdapter(shopItemListRecyclerViewAdapter);
-        shopListRecyclerView.setLayoutManager(new LinearLayoutManager(this));*/
+        shopListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        */
 
     }
 

@@ -15,7 +15,10 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onInputChanged() {
         super.onInputChanged();
-        if(     task_title != "" &&
+
+        // If statement in order to make sure that all of the fields are filled out
+        // before allowing the Okay button to be pressed.
+        if (    task_title != "" &&
                 task_icon_id != -1 &&
                 length_hour != -1 &&
                 length_minute != -1 &&
@@ -26,8 +29,11 @@ public class NewTaskActivity extends TaskActivity {
                 next_occurrence_minute != -1 &&
                 interval_days != -1 &&
                 interval_hours != -1) {
+
             okayButton.setEnabled(true);
-        }else{
+
+        } else {
+
             okayButton.setEnabled(false);
         }
     }
@@ -35,7 +41,8 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onOkayButtonPressed() {
         super.onOkayButtonPressed();
-        //save the new task :)
+
+        // Save the new task.
         Task.createTask(this, new Task(this.task_title, this.task_icon_id, this.length_hour, this.length_minute, this.next_occurrence_year, this.next_occurrence_month, this.next_occurrence_day, this.next_occurrence_hour, this.next_occurrence_minute, this.interval_days, this.interval_hours));
     }
 
