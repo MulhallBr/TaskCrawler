@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
     // Method to reset all player data and clear the database to default settings.
     private void resetData() {
         //WIPE USER PREFERENCES/STATS
-        //Player.getPlayer().reset(this);
+        Player.getPlayer().reset(this);
 
         AppDatabase.getAppDatabase(this).taskDAO().nukeTable();
         AppDatabase.getAppDatabase(this).weaponDAO().nukeTable();

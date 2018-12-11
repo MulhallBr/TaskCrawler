@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         equippedWeaponImageView = findViewById(R.id.equippedWeaponImageView);
 
         drawerHeaderContainer = findViewById(R.id.drawerHeaderContainer);
-
+        
         //drawerPlayerInfoText = drawerHeaderContainer.findViewById(R.id.playerInfoText);
 
         Weapon.initializeItems(this, this.getResources());  // Initialize the database,
@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity
         createNotificationChannel(); // Create the notification channel so this app can do noticiations on OREO+
         //notificationMethod("YOUR THING IS DUE", "GET IT DONE. DO THE THING YOU DUMMY");
         updatePlayerDataView(); // Display player information.
-
     }
 
     // The task tap callback method.
@@ -162,14 +161,12 @@ public class MainActivity extends AppCompatActivity
     
         // Updates the views that display the player's stats.
         if(Player.getPlayer().getEquippedIconId(this) != -1) {
-            Icon playerIcon = Icon.getIcon(this, (int)Player.getPlayer().getEquippedIconId(this));
+            Icon playerIcon = Icon.getIcon(this, (int) Player.getPlayer().getEquippedIconId(this));
             playerIconImageView.setImageResource(this.getResources().getIdentifier(playerIcon.getIconFilename(), "drawable", this.getApplicationContext().getPackageName()));
         }
 
         if(Player.getPlayer().getEquippedWeaponId(this) != -1) {
             equippedWeaponImageView.setImageResource(this.getResources().getIdentifier(Weapon.getWeapon(getBaseContext(), (int)Player.getPlayer().getEquippedWeaponId(getBaseContext())).getIconFilename(), "drawable", this.getApplicationContext().getPackageName()));
-        }else{
-            //equippedWeaponImageView.setImageResource(0);
         }
 
         String level = String.format("Level: %d",
