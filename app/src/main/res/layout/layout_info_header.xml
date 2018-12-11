@@ -31,18 +31,56 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/main_character_1_with_bg" />
 
+    <ImageView
+        android:id="@+id/playerLevelImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="fitStart"
+
+        app:layout_constraintStart_toEndOf="@+id/playerIconImageView"
+        app:layout_constraintTop_toTopOf="@+id/playerIconImageView"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/icon_spirit_glow" />
+
     <TextView
-        android:id="@+id/playerInfoText"
+        android:id="@+id/playerInfoLevel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="2dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text="Level"
+
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+
+        app:layout_constraintStart_toEndOf="@+id/playerLevelImageView"
+        app:layout_constraintTop_toTopOf="@+id/playerIconImageView" />
+
+    <ImageView
+        android:id="@+id/playerGoldImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="fitStart"
+
+        app:layout_constraintStart_toEndOf="@+id/playerInfoLevel"
+        app:layout_constraintTop_toTopOf="@+id/playerIconImageView"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/icon_gold_coins" />
+
+    <TextView
+        android:id="@+id/playerInfoGold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="16dp"
+        android:text="Gold"
 
         android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playerIconImageView"
+        app:layout_constraintStart_toEndOf="@+id/playerGoldImageView"
         app:layout_constraintTop_toTopOf="@+id/playerIconImageView" />
 
     <ProgressBar
@@ -58,10 +96,9 @@
         android:progress="25"
         android:progressDrawable="@drawable/progressbar"
         app:layout_constraintBottom_toBottomOf="@+id/playerIconImageView"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playerIconImageView"
-        app:layout_constraintTop_toBottomOf="@+id/playerInfoText" />
+        app:layout_constraintTop_toBottomOf="@+id/playerInfoLevel" />
 
     <ImageView
         android:id="@+id/equippedWeaponImageView"

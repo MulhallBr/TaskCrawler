@@ -2,7 +2,6 @@ package games.bad.taskcrawler;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -26,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import android.util.Log;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     
     private TextView noTaskTextView;
     private TextView playerInfoText;
+    private TextView playerInfoGold;
 
     // Initialize the Adapter, Handler and Runnable for the RecyclerView
     private TaskListAdapter taskListAdapter;
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity
     private ImageView equippedWeaponImageView;
     private ImageView playerIconImageView;
 
+    // PROGRESS BAR
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -74,8 +78,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         noTaskTextView = findViewById(R.id.noTaskTextView);
-        playerInfoText = findViewById(R.id.playerInfoText);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        playerInfoText = findViewById(R.id.playerInfoLevel);
+        playerInfoGold = findViewById(R.id.playerInfoGold);
+        drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigationView);
         toolbarLayout = findViewById(R.id.toolbar);
         setSupportActionBar(toolbarLayout);
@@ -168,11 +173,19 @@ public class MainActivity extends AppCompatActivity
             //equippedWeaponImageView.setImageResource(0);
         }
 
-        String text = String.format("Level: %d, Exp: %d, Gold, %d",
-                Player.getPlayer().getLevel(this),      // PLAYER LEVEL
-                Player.getPlayer().getExperience(this), // PLAYER EXP
-                Player.getPlayer().getGold(this));      // PLATER GOLD
-        playerInfoText.setText(text);
+        String level = String.format("Level: %d",
+                Player.getPlayer().getLevel(this));      // PLAYER LEVEL
+
+        String gold = String.format("%d",
+                Player.getPlayer().getGold(this));      // PLAYER GOLD
+
+        playerInfoText.setText(level);
+        playerInfoGold.setText(gold);
+
+        // Update the progress bar with Player Exp and it's new maximum
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setProgress((int) Player.getPlayer().getExperience(this));
+        progressBar.setMax((int) Player.getPlayer().getNextLevelExperience(this));
 
         //drawerPlayerInfoText.setText("oops");
     }
