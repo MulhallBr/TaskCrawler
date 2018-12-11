@@ -65,6 +65,18 @@ public class Item {
         return activity.getResources().getIdentifier(this.getIconFilename(), "drawable", activity.getPackageName());
     }
 
+    public boolean purchase(Context context) {
+        if(Player.getPlayer().getGold(context) >= this.getCost()) {
+            Player.getPlayer().addGold(context,0 - this.getCost()); //reduce that number of coins
+            this.setPurchased(true);
+            this.commit(context);
+            return true;
+        }
+        return false;
+    }
+
+    public void commit(Context context) {}
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 

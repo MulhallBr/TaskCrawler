@@ -13,9 +13,16 @@
     android:paddingBottom="0dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+    <!---
     <include
         layout="@layout/layout_info_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" /> -->
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/background_green" />
 </LinearLayout>

@@ -26,14 +26,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".InventoryActivity" />
-        <activity android:name=".NewTaskActivity" />
-        <activity android:name=".EditTaskActivity" />
+        <activity android:name=".InventoryActivity" android:label="@string/inventory_name"/>
+        <activity android:name=".NewTaskActivity" android:label="@string/new_task_name"/>
+        <activity android:name=".EditTaskActivity" android:label="@string/edit_task_name"/>
         <activity android:name=".TaskActivity" />
         <activity android:name=".DayHourPickerDialog" />
         <activity android:name=".IconSelectActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".SettingsActivity" android:label="@string/settings_name"/>
+        <activity android:name=".AboutActivity" android:label="@string/about_name"></activity>
     </application>
 
 </manifest>
