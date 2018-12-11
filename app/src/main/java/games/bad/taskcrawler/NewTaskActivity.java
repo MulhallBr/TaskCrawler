@@ -1,12 +1,6 @@
 package games.bad.taskcrawler;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import Model.Task;
 
@@ -22,7 +16,7 @@ public class NewTaskActivity extends TaskActivity {
     protected void onInputChanged() {
         super.onInputChanged();
 
-        if(     task_title != "" &&
+        if (    task_title != "" &&
                 task_icon_id != -1 &&
                 length_hour != -1 &&
                 length_minute != -1 &&
@@ -33,8 +27,11 @@ public class NewTaskActivity extends TaskActivity {
                 next_occurrence_minute != -1 &&
                 interval_days != -1 &&
                 interval_hours != -1) {
+
             okayButton.setEnabled(true);
-        }else{
+
+        } else {
+
             okayButton.setEnabled(false);
         }
     }
@@ -42,7 +39,8 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onOkayButtonPressed() {
         super.onOkayButtonPressed();
-        //save the new task :)
+
+        // Save the new task.
         Task.createTask(this, new Task(this.task_title, this.task_icon_id, this.length_hour, this.length_minute, this.next_occurrence_year, this.next_occurrence_month, this.next_occurrence_day, this.next_occurrence_hour, this.next_occurrence_minute, this.interval_days, this.interval_hours));
     }
 

@@ -31,16 +31,15 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.d(TAG, "OnCreate");
+        Log.d(TAG, "IconOnCreate"); // Logcat print for debugging.
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
-
         inventoryTabLayout = findViewById(R.id.inventoryTabLayout);
         weaponRecyclerView = findViewById(R.id.weapon_recyclerview);
         iconRecyclerView = findViewById(R.id.icon_recyclerView);
-
         inventoryTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tabSelected(tab.getPosition());
@@ -57,10 +56,14 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
             }
         });
 
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Fill the RecyclerView with all of the items, using the default itemListAdapter.
+        //RecyclerView weaponRecyclerView = findViewById(R.id.weapon_recyclerview);
+        
         List<Weapon> weapons = Weapon.getAllPurchasedWeapons(this); //get all purchased weapons
         List<Icon> icons = Icon.getAllPurchasedPlayerIcons(this); //get all purchased icons
 

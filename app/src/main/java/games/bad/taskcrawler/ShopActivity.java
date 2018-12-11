@@ -27,17 +27,17 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
     IconShopListAdapter iconShopListAdapter;
     private TabLayout shopTabLayout;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        // Enable the back button in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+      
         weapon_recyclerview = findViewById(R.id.weapon_recyclerview);
         icon_recyclerview = findViewById(R.id.shop_icon_recyclerview);
         shopTabLayout = findViewById(R.id.shopTabLayout);
@@ -59,10 +59,10 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
             }
         });
 
-        //Item.initializeItems(this, this.getResources()); //fill the database with initial data if the db is not already full.
-        List<Weapon> weapons = Weapon.getAllUnpurchasedWeapons(this); //get all the items from the database.
+          //Item.initializeItems(this, this.getResources());  // Fill the database with initial data if the db is not already full.
+        List<Weapon> weapons = Weapon.getAllUnpurchasedWeapons(this); // Grab all of the weapons from the database.
 
-        //fill the recycler view with the data from the Items.
+        // Fill the RecyclerView with the data from the Items.
         weaponShopListAdapter = new WeaponShopListAdapter(weapons, this);
         weapon_recyclerview.setAdapter(weaponShopListAdapter);
         weapon_recyclerview.setLayoutManager(new LinearLayoutManager(this));

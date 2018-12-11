@@ -2,7 +2,6 @@ package games.bad.taskcrawler;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
@@ -24,7 +23,7 @@ public class TaskFightDialog extends Dialog {
 
     private int experienceGained, goldGained, levelGained;
 
-    public TaskFightDialog(Activity act, Task task) {
+    TaskFightDialog(Activity act, Task task) {
         super(act);
         activity = act;
         this.task = task;
@@ -49,13 +48,12 @@ public class TaskFightDialog extends Dialog {
 
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 okayButtonOnClick();
             }
         });
         fillViews();
     }
-
 
     public void fillViews() {
         long oldLevel, oldGold;
@@ -77,7 +75,7 @@ public class TaskFightDialog extends Dialog {
         }
     }
 
-    public void okayButtonOnClick() {
+    private void okayButtonOnClick() {
         dismiss();
     }
 }

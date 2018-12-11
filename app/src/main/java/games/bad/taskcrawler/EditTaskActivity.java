@@ -2,40 +2,44 @@ package games.bad.taskcrawler;
 
 import android.graphics.PorterDuff;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
-import java.util.List;
 
 import Model.AppDatabase;
 import Model.Task;
 
 public class EditTaskActivity extends TaskActivity {
+
     int taskID;
     Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         View parentLayout = findViewById(android.R.id.content);
 
-        //in this activity, the "back" button becomes the "DELETE" button.
-        backButton.setText("DELETE");//change button text to "DELETE"
-        //change the color tint to a nice deep Red.
+        // In the EditTaskActivity, the "BACK" button becomes the "DELETE" button.
+        backButton.setText("DELETE"); // Change button text to "DELETE".
+
+        // Change the color of it's background to a nice deep red.
         backButton.getBackground().setColorFilter(this.getResources().getColor(R.color.warningPrimary), PorterDuff.Mode.MULTIPLY);
 
-        taskID = getIntent().getIntExtra("task_id", -1); //see if this activity was passed a task id
+        taskID = getIntent().getIntExtra("task_id", -1); // Check if this activity was passed a task ID.
 
-        if(taskID == -1) { //if it was not
-            //show an error.
+        // If it was not passed an ID, then show an error, and end the activity.
+        if(taskID == -1) {
+
             Snackbar.make(parentLayout, "ERROR: Invalid Task ID!", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
-            finish(); //and end the activity.
+
+            finish(); // Ending the activity.
         }
 
-        task = Task.getTaskById(this, taskID); //get the task we want to edit.
+        task = Task.getTaskById(this, taskID);  // Grab the task the user wants to edit
+                                                        // using the ID that was passed in.
 
+        // Grab all of the Task's information using the class getters.
         task_title = task.getTitle();
         task_icon_id = task.getIconId();
 
@@ -51,7 +55,7 @@ public class EditTaskActivity extends TaskActivity {
         interval_days = task.getIntervalDays();
         interval_hours = task.getIntervalHour();
 
-        //Fill the views with the task data :)
+        // Fill the views with the Task's information
         taskNameInput.setText(task.getTitle());
         updateIconImageView();
         updateLengthTextView();
@@ -63,6 +67,7 @@ public class EditTaskActivity extends TaskActivity {
     protected void onOkayButtonPressed() {
         super.onOkayButtonPressed();
 
+        // Replace all of the old information with the edited info.
         task.setTitle(task_title);
 
         task.setLengthHours(length_hour);
@@ -79,14 +84,15 @@ public class EditTaskActivity extends TaskActivity {
         task.setIntervalDays(interval_days);
         task.setIntervalHour(interval_hours);
 
+        // Save all of the changes made to this task.
         task.commit(getApplicationContext());
-        //save the changes made to this task.
     }
 
     @Override
     protected void onBackButtonPressed() {
-        //this is actually the delete button!!!!
-        AppDatabase.getAppDatabase(getBaseContext()).taskDAO().deleteTask(task);//delete the task!
+        // This is actually the delete button!
+        // Was changed above, in onCreate.
+        AppDatabase.getAppDatabase(getBaseContext()).taskDAO().deleteTask(task); // Delete the task!
         super.onBackButtonPressed();
     }
 }
