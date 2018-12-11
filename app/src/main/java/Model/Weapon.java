@@ -52,16 +52,6 @@ public class Weapon extends Item {
     @ColumnInfo(name = "gold_boost")
     private int goldBoost; //the item description.
 
-    public boolean purchase(Context context) {
-        if(Player.getPlayer().getGold(context) >= this.getCost()) {
-            Player.getPlayer().addGold(context,0 - this.getCost()); //reduce that number of coins
-            this.setPurchased(true);
-            this.commit(context);
-            return true;
-        }
-        return false;
-    }
-
 
     public Weapon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased, String description, int xpBoost, int goldBoost) {
         super(name, iconFilename, cost,requiredLevel,purchased);

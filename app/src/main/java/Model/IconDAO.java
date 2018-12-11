@@ -29,20 +29,23 @@ public interface IconDAO {
     @Delete
     void deleteIcon(Icon icon);
 
-    @Query("SELECT * FROM icon_table ORDER BY id ASC")
+    @Query("SELECT * FROM icon_table ORDER BY required_level ASC, id")
     List<Icon> getAllIcons();
 
-    @Query("SELECT * FROM icon_table WHERE purchased = 1 AND icon_type = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM icon_table WHERE purchased = 1 AND icon_type = 1 ORDER BY required_level ASC, id")
     List<Icon> getAllPurchasedPlayerIcons();
 
-    @Query("SELECT * FROM icon_table WHERE purchased = 0 AND icon_type = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM icon_table WHERE purchased = 0 AND icon_type = 1 ORDER BY required_level ASC, id")
     List<Icon> getAllUnpurchasedPlayerIcons();
 
-    @Query("SELECT * FROM icon_table WHERE purchased = 1 AND icon_type = 0 ORDER BY id ASC")
+    @Query("SELECT * FROM icon_table WHERE purchased = 1 AND icon_type = 0 ORDER BY required_level ASC, id")
     List<Icon> getAllPurchasedEnemyIcons();
 
-    @Query("SELECT * FROM icon_table WHERE purchased = 0 AND icon_type = 0 ORDER BY id ASC")
+    @Query("SELECT * FROM icon_table WHERE purchased = 0 AND icon_type = 0 ORDER BY required_level ASC, id")
     List<Icon> getAllUnpurchasedEnemyIcons();
+
+    @Query("SELECT * FROM icon_table WHERE purchased = 0 ORDER BY required_level ASC, id")
+    List<Icon> getAllUnpurchasedIcons();
 
     @Query("DELETE FROM icon_table")
     public void nukeTable();

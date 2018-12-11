@@ -319,15 +319,18 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     protected void showFirstTimeDatePickerDialog() {
         final Calendar myCalender = Calendar.getInstance();
+        final DatePickerDialog datePickerDialog;
 
         DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int dp_year, int dp_month, int dp_dayOfMonth) {
-                showFirstTimeTimePickerDialog(dp_year, dp_month, dp_dayOfMonth);
+                if(view.isShown()) {
+                    showFirstTimeTimePickerDialog(dp_year, dp_month, dp_dayOfMonth);
+                }
             }
         };
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, next_occurrence_year, next_occurrence_month, next_occurrence_day);
+        datePickerDialog = new DatePickerDialog(this, myDateListener, next_occurrence_year, next_occurrence_month, next_occurrence_day);
         datePickerDialog.setTitle("Which day will it start?");
         datePickerDialog.show();
     }

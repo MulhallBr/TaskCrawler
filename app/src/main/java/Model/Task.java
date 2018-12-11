@@ -505,21 +505,24 @@ public class Task implements Comparable<Task> {
         //long experience = Math.min(420, (long)Math.floor(420.f * (((getTimeUntilDueInSeconds() / (60*60)) * ((getLengthHours()*60) + getLengthMinutes())) / 8640.f)));
         Player.getPlayer().addExperience(context, experience);
         Player.getPlayer().addGold(context, gold);
-        this.setTimeLastCompleted(System.currentTimeMillis()/1000);
 
-        //set the next occurrence
-        Calendar nextOccurrenceCalendar = Calendar.getInstance();
-        nextOccurrenceCalendar.setTimeInMillis(getNextOccurrenceInMillis() + getIntervalInMillis());
+        if(this.getIntervalInMillis() == 0 ) {
+            AppDatabase.getAppDatabase(context).taskDAO().deleteTask(this);
+        }else {
+            this.setTimeLastCompleted(System.currentTimeMillis() / 1000);
 
-        setNextOccurrenceYear(nextOccurrenceCalendar.get(Calendar.YEAR));
-        setNextOccurrenceMonth(nextOccurrenceCalendar.get(Calendar.MONTH));
-        setNextOccurrenceDay(nextOccurrenceCalendar.get(Calendar.DAY_OF_MONTH));
-        setNextOccurrenceHour(nextOccurrenceCalendar.get(Calendar.HOUR_OF_DAY));
-        setNextOccurrenceMinute(nextOccurrenceCalendar.get(Calendar.MINUTE));
+            //set the next occurrence
+            Calendar nextOccurrenceCalendar = Calendar.getInstance();
+            nextOccurrenceCalendar.setTimeInMillis(getNextOccurrenceInMillis() + getIntervalInMillis());
 
-        this.setLastOverdueCheckTime(-1);
-
-        this.commit(context);
+            setNextOccurrenceYear(nextOccurrenceCalendar.get(Calendar.YEAR));
+            setNextOccurrenceMonth(nextOccurrenceCalendar.get(Calendar.MONTH));
+            setNextOccurrenceDay(nextOccurrenceCalendar.get(Calendar.DAY_OF_MONTH));
+            setNextOccurrenceHour(nextOccurrenceCalendar.get(Calendar.HOUR_OF_DAY));
+            setNextOccurrenceMinute(nextOccurrenceCalendar.get(Calendar.MINUTE));
+            this.setLastOverdueCheckTime(-1);
+            this.commit(context);
+        }
 
         return experience;
     }

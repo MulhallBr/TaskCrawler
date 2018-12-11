@@ -82,6 +82,11 @@ public class Icon extends Item {
         return icons;
     }
 
+    public static List<Icon> getAllUnpurchasedIcons(Context context) {
+        List<Icon> icons = AppDatabase.getAppDatabase(context).iconDAO().getAllUnpurchasedIcons();
+        return icons;
+    }
+
     //static method to initialize all item data.
     public static void initializeItems(Context context, Resources res) {
 

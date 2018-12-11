@@ -55,9 +55,13 @@ public class WeaponInventoryListAdapter extends RecyclerView.Adapter<WeaponInven
         holder.itemDescription.setText(this.weapons.get(position).getDescription());
         if(Player.getPlayer().getEquippedWeaponId(this.context) == this.weapons.get(position).getId()) {
             //highlight it in
+            holder.itemName.setTextColor(context.getResources().getColor(R.color.textInverse));
+            holder.itemDescription.setTextColor(context.getResources().getColor(R.color.textInverse));
             holder.parentLayout.getBackground().setColorFilter(context.getResources().getColor(R.color.colorPrimaryLight), PorterDuff.Mode.MULTIPLY);
         }else{
             //clear the color highlighting
+            holder.itemName.setTextColor(context.getResources().getColor(R.color.textPrimary));
+            holder.itemDescription.setTextColor(context.getResources().getColor(R.color.textPrimary));
             holder.parentLayout.getBackground().clearColorFilter();
             //holder.parentLayout.getBackground().setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY); <- DEPRICAATED
         }

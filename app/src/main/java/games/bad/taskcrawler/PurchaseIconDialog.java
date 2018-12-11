@@ -10,15 +10,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import Model.Icon;
 import Model.Player;
-import Model.Task;
 import Model.Weapon;
 
-public class PurchaseWeaponDialog extends Dialog {
+public class PurchaseIconDialog extends Dialog {
     private Activity activity;
-    private Weapon weapon;
+    private Icon icon;
+
     private TextView itemTitle;
     private TextView itemDescription;
     private ImageView itemIcon;
@@ -26,10 +25,10 @@ public class PurchaseWeaponDialog extends Dialog {
     private Button purchaseButton;
     private Button cancelButton;
 
-    public PurchaseWeaponDialog(Activity activity, Weapon weapon) {
+    public PurchaseIconDialog(Activity activity, Icon icon) {
         super(activity);
         this.activity = activity;
-        this.weapon = weapon;
+        this.icon = icon;
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,16 @@ public class PurchaseWeaponDialog extends Dialog {
 
         itemCost = findViewById(R.id.itemCost);
 
-        itemCost.setText(String.format("%d",weapon.getCost()));
-        itemTitle.setText(weapon.getName());
-        itemDescription.setText(weapon.getDescription());
-        itemIcon.setImageResource(weapon.getIconResourceId(activity));
+        itemCost.setText(String.format("%d",icon.getCost()));
+        itemTitle.setText(icon.getName());
+        itemDescription.setText("");
+        itemIcon.setImageResource(icon.getIconResourceId(activity));
 
         purchaseButton  = findViewById(R.id.purchaseButton);
         cancelButton = findViewById(R.id.backButton);
 
         //if the user doesnt have enough money, dont let them buy it.
-        if(Player.getPlayer().getGold(activity) < weapon.getCost()) {
+        if(Player.getPlayer().getGold(activity) < icon.getCost()) {
             purchaseButton.setEnabled(false);
             purchaseButton.setText("NOT ENOUGH GOLD");
         }
@@ -60,7 +59,7 @@ public class PurchaseWeaponDialog extends Dialog {
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(weapon.purchase(activity) == false) {
+                if(icon.purchase(activity) == false) {
                     Snackbar.make(v, "Not enough gold to purchase item", Snackbar.LENGTH_LONG).show();
                     return;
                 }
@@ -68,4 +67,5 @@ public class PurchaseWeaponDialog extends Dialog {
             }
         });
     }
+
 }
