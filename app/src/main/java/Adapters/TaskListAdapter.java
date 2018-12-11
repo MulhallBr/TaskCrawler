@@ -1,10 +1,13 @@
 package Adapters;
 
 
+
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     private Context context;
     private TaskTapCallback listener; //tap callback listener.
 
+    // Notification stuffs
+    private static final int uniqueID = 420111;
+    private static final String CHANNEL_ID = "com.games.bad.taskcrawler.notifx";
+
     //tap callback setter.
     public void setTapTaskCallback(TaskTapCallback callback){
         this.listener = callback;
@@ -37,6 +44,23 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         Collections.sort(tasks);
         this.tasks = tasks;
         this.context = context;
+    }
+
+    // Create the notification, passing in title and content.
+    public void notificationMethod(String title, String content) {
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
+
+        // Set all of the attributes of the notification
+        notificationBuilder.setSmallIcon(R.drawable.icon_enemy_elf_archer);
+        notificationBuilder.setContentTitle(title);
+        notificationBuilder.setContentText(content);
+        notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        // Implement the notification using the notification manager
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(uniqueID, notificationBuilder.build());
+
     }
 
     @NonNull
@@ -58,9 +82,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         holder.taskDueDate.setText(String.format("Due %s", this.tasks.get(position).getTimeUntilDueAsString()));
 
         if(this.tasks.get(position).getTimeUntilDueInSeconds() < 0) {
-            //if it's overdue!
+            // The task is overdue!
+            // Sets the Task to a red background and sends a push notification.
             holder.parentLayout.getBackground().setColorFilter(context.getResources().getColor(R.color.overdue), PorterDuff.Mode.MULTIPLY);
+
+            notificationMethod("Your Task Is Due!", "this should get the task info..."); // Notification !!
         }else{
+
             holder.parentLayout.getBackground().clearColorFilter();
 
         }
