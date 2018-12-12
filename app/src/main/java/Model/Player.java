@@ -3,6 +3,9 @@ package Model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
+
+import java.util.List;
 
 //This class will contain all the methods necessary to handling player data.
 //things like experience, level, gold, etc will all be here.
@@ -78,18 +81,29 @@ public class Player {
         editor.putLong("level", 1);
         editor.putLong("experience", 0);
         editor.putLong("gold", 0);
+        editor.putLong("icon", -1);
+        editor.putLong("weapon", -1);
         editor.commit();
     }
 
     public void setEquippedWeapon(Context context, Weapon weapon) {
         SharedPreferences.Editor editor = this.getSharedPreferencesEditor(context);
+
         editor.putLong("weapon", weapon.getId());
         editor.commit();
     }
 
     public long getEquippedWeaponId(Context context) {
         SharedPreferences preferences = this.getSharedPreferences(context);
-        return preferences.getLong("weapon", -1);
+        if(preferences.getLong("weapon", -1) != -1) { //if this is set in shared prefs...
+            return preferences.getLong("weapon", -1);
+        }else{ //else, if it hasnt been set yet...
+            List<Weapon> weapons = Weapon.getWeapons(context); //get all weapons
+            if(weapons.size() > 0) { //if there are any weapons
+                return weapons.get(0).getId(); //choose the first one :)
+            }
+        }
+        return -1;
     }
 
     public void setEquippedIcon(Context context, Icon icon) {
@@ -100,7 +114,14 @@ public class Player {
 
     public long getEquippedIconId(Context context) {
         SharedPreferences preferences = this.getSharedPreferences(context);
-        return preferences.getLong("icon", -1);
+        if(preferences.getLong("icon", -1) != -1) {
+            return preferences.getLong("icon", -1);
+        }else{
+            List<Icon> icons = Icon.getAllPurchasedPlayerIcons(context);
+            if(icons.size() > 0) {
+                return icons.get(0).getId();
+            }
+        }
+        return -1;
     }
-
 }
