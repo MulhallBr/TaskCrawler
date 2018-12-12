@@ -33,7 +33,10 @@
         <activity android:name=".DayHourPickerDialog" />
         <activity android:name=".IconSelectActivity" />
         <activity android:name=".SettingsActivity" android:label="@string/settings_name"/>
-        <activity android:name=".AboutActivity" android:label="@string/about_name"></activity>
+        <activity android:name=".AboutActivity" android:label="@string/about_name"/>
+        <service
+            android:enabled="true"
+            android:name=".NotificationService"/>
     </application>
 
 </manifest>

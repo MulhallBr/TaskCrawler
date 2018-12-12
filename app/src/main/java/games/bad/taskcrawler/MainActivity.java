@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TaskTapCallback {
 
     private static final String CHANNEL_ID = "com.games.bad.taskcrawler.notifx";
+    public static  final int NOTIFICATION_TAPPED = 1;
 
     private static final String TAG = "MainActivity";
     private DrawerLayout drawerLayout;
@@ -61,12 +62,8 @@ public class MainActivity extends AppCompatActivity
 
     private LinearLayout drawerHeaderContainer;
 
-    private TextView drawerPlayerInfoText;
     private ImageView equippedWeaponImageView;
     private ImageView playerIconImageView;
-
-    // PROGRESS BAR
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +108,10 @@ public class MainActivity extends AppCompatActivity
         } else {
             // If there are tasks, make sure that prompt is not visible.
             noTaskTextView.setVisibility(View.GONE);
+
+            //Intent serviceIntent = new Intent(this, NotificationService.class);
+            //serviceIntent.putExtra("time", (int) tasks.get(0).getTimeUntilDueInSeconds());
+            //this.startService(serviceIntent);
         }
 
         // Set up the RecyclerView and Adapter
@@ -133,8 +134,8 @@ public class MainActivity extends AppCompatActivity
             }
         };
         taskListUpdateHandler.postDelayed(taskListUpdateRunnable, 5000);
-        createNotificationChannel(); // Create the notification channel so this app can do noticiations on OREO+
-        //notificationMethod("YOUR THING IS DUE", "GET IT DONE. DO THE THING YOU DUMMY");
+
+        createNotificationChannel(); // Create the notification channel so this app can do notifications on OREO+
         updatePlayerDataView(); // Display player information.
     }
 
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity
         playerInfoGold.setText(gold);
 
         // Update the progress bar with Player Exp and it's new maximum
-        progressBar = findViewById(R.id.progressBar);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setProgress((int) Player.getPlayer().getExperience(this));
         progressBar.setMax((int) Player.getPlayer().getNextLevelExperience(this));
 
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity
         for (Task task : tasks) {
             long overdueCycles = task.getOverduePeriods(this);
             if (overdueCycles > 0) {
-                //Snackbar.make(playerIconImageView, String.format("EE: %d", overdueCycles), Toast.LENGTH_LONG).show();
+
                 Player.getPlayer().addExperience(this, overdueCycles * - 5); //you lose 5xp for every period you leave each task overdue.
             }
         }
@@ -209,12 +210,15 @@ public class MainActivity extends AppCompatActivity
 
         this.taskListAdapter.updateList(tasks);
         updatePlayerDataView();
+
     }
 
     // We override this method in order to make certain updates.
     @Override
     public void onResume() {
         super.onResume();
+
+        List<Task> tasks = Task.getTasksInOrder(this);
 
         taskListAdapter.updateList(Task.getTasksInOrder(this));
 
@@ -224,6 +228,11 @@ public class MainActivity extends AppCompatActivity
         // Update the task list and the player's stats.
         updateTaskList();
         updatePlayerDataView();
+
+        if(tasks.size() != 0) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            this.startService(serviceIntent);
+        }
     }
 
     // We override this method so that if the NavDrawer is open,
