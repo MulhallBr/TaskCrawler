@@ -1,7 +1,5 @@
 package Adapters;
 
-
-
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
@@ -60,7 +58,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         // Implement the notification using the notification manager
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(uniqueID, notificationBuilder.build());
-
     }
 
     @NonNull
@@ -85,7 +82,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             // The task is overdue!
             // Sets the Task to a red background and sends a push notification.
             holder.parentLayout.getBackground().setColorFilter(context.getResources().getColor(R.color.overdue), PorterDuff.Mode.MULTIPLY);
-
             notificationMethod("Your Task Is Due!", "this should get the task info..."); // Notification !!
         }else{
 

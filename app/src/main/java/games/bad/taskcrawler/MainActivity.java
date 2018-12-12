@@ -1,8 +1,8 @@
 package games.bad.taskcrawler;
 
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -12,8 +12,6 @@ import android.support.annotation.NonNull;
 
 import android.os.Handler;
 
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
@@ -24,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -89,12 +88,11 @@ public class MainActivity extends AppCompatActivity
         equippedWeaponImageView = findViewById(R.id.equippedWeaponImageView);
 
         drawerHeaderContainer = findViewById(R.id.drawerHeaderContainer);
-        
+
         //drawerPlayerInfoText = drawerHeaderContainer.findViewById(R.id.playerInfoText);
 
         Weapon.initializeItems(this, this.getResources());  // Initialize the database,
         Icon.initializeItems(this, this.getResources());    // if it hasn't been done already.
-
 
         // Toggles the name of the action bar based on whether or not the  navigation drawer is open.
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbarLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -154,11 +152,11 @@ public class MainActivity extends AppCompatActivity
         });
 
         tpd.show();
+        doKeepDialog(tpd);
     }
 
     // Method in order to update the Player's different stats, displayed at the top of the screen.
     public void updatePlayerDataView() {
-    
         // Updates the views that display the player's stats.
         if(Player.getPlayer().getEquippedIconId(this) != -1) {
             Icon playerIcon = Icon.getIcon(this, (int) Player.getPlayer().getEquippedIconId(this));
@@ -206,6 +204,8 @@ public class MainActivity extends AppCompatActivity
             // If there are tasks, make sure that prompt is not visible.
             noTaskTextView.setVisibility(View.GONE);
         }
+
+
 
         this.taskListAdapter.updateList(tasks);
         updatePlayerDataView();
@@ -302,5 +302,12 @@ public class MainActivity extends AppCompatActivity
             notificationManager.createNotificationChannel(channel);
 
         }
+    }
+    private static void doKeepDialog(Dialog dialog) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lp);
     }
 }

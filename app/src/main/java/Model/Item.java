@@ -49,6 +49,10 @@ public class Item {
         return purchased;
     }
 
+    public String getItemType() {
+        return "ITEM";
+    }
+
     public void setPurchased(boolean purchased) {
         this.purchased = purchased;
     }

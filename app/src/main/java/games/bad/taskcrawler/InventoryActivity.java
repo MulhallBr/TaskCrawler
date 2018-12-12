@@ -26,7 +26,6 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
     private TabLayout inventoryTabLayout;
     private RecyclerView weaponRecyclerView;
     private RecyclerView iconRecyclerView;
-    private RecyclerView scrollRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,7 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
         inventoryTabLayout = findViewById(R.id.inventoryTabLayout);
         weaponRecyclerView = findViewById(R.id.weapon_recyclerview);
         iconRecyclerView = findViewById(R.id.icon_recyclerView);
+
         inventoryTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             
             @Override
@@ -76,6 +76,7 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
         iconRecyclerView.setAdapter(iconInventoryListAdapter);
         iconRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         iconInventoryListAdapter.setIconTapCallback(this);
+
         tabSelected(0);
     }
 
@@ -91,7 +92,6 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
         if(position == 0) {
             weaponRecyclerView.setVisibility(View.VISIBLE);
             iconRecyclerView.setVisibility(View.GONE);
-
 
         }else if(position == 1) {
             weaponRecyclerView.setVisibility(View.GONE);
@@ -131,10 +131,24 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
         updateAdapters();
     }
 
-
     @Override
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("current_tab", inventoryTabLayout.getSelectedTabPosition());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        int currentTab = savedInstanceState.getInt("current_tab", 0);
+
+        TabLayout.Tab tab = inventoryTabLayout.getTabAt(currentTab);
+        tab.select();
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

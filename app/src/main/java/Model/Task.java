@@ -478,6 +478,16 @@ public class Task implements Comparable<Task> {
 
     public long complete(Context context) {
 
+        double xp_multiplier = 1;
+        double gold_multiplier = 1;
+
+
+        int equippedWeaponId = (int)Player.getPlayer().getEquippedWeaponId(context);
+        if(equippedWeaponId != -1) {
+            xp_multiplier += Weapon.getWeapon(context, equippedWeaponId).getXpBoost() * .01;
+            gold_multiplier += Weapon.getWeapon(context, equippedWeaponId).getGoldBoost() * .01;
+        }
+
         long experience = 30; //base reward
         long gold = 10; //base gold.
 
@@ -501,6 +511,9 @@ public class Task implements Comparable<Task> {
                 gold += 100;
             }
         }
+
+        experience *= xp_multiplier;
+        gold *= gold_multiplier;
 
         //long experience = Math.min(420, (long)Math.floor(420.f * (((getTimeUntilDueInSeconds() / (60*60)) * ((getLengthHours()*60) + getLengthMinutes())) / 8640.f)));
         Player.getPlayer().addExperience(context, experience);

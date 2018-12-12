@@ -18,7 +18,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract WeaponDAO weaponDAO();
     public abstract IconDAO iconDAO();
 
-
     //Create, if necessary, and and return the static database instance.
     //this is singleton hackery, which can only return ONE instance of the object.
     public static AppDatabase getAppDatabase(Context context) {

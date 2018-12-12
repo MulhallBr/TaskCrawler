@@ -52,7 +52,6 @@ public class Weapon extends Item {
     @ColumnInfo(name = "gold_boost")
     private int goldBoost; //the item description.
 
-
     public Weapon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased, String description, int xpBoost, int goldBoost) {
         super(name, iconFilename, cost,requiredLevel,purchased);
         this.setDescription(description);
@@ -62,6 +61,9 @@ public class Weapon extends Item {
 
     public static Weapon getWeapon(Context context, int id) {
         return AppDatabase.getAppDatabase(context).weaponDAO().getWeaponById(id);
+    }
+    public String getItemType() {
+        return "WEAPON";
     }
 
     public static boolean itemExists(Context context, int id) {

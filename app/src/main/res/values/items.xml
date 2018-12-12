@@ -30,6 +30,69 @@
             \"xp_boost\":0,
             \"gold_boost\":1}
         </item>
+        <item>
+            {\"name\":\"Extremely Great Sword\",
+            \"description\":\"The best sword. +100% gold, +100% xp\",
+            \"icon_filename\": \"@drawable/weapon_69\",
+            \"cost\":0,
+            \"required_level\":0,
+            \"xp_boost\":100,
+            \"gold_boost\":100}
+        </item>
+        <item>
+            {\"name\":\"Basic axe\",
+            \"description\":\"A pretty basic axe. +10% xp\",
+            \"icon_filename\": \"@drawable/weapon_axe\",
+            \"cost\":350,
+            \"required_level\":10,
+            \"xp_boost\":10,
+            \"gold_boost\":0}
+        </item>
+        <item>
+            {\"name\":\"Tall axe\",
+            \"description\":\"A tall axe what for killin with. +25% xp, +5% gold\",
+            \"icon_filename\": \"@drawable/weapon_axe_two\",
+            \"cost\":525,
+            \"required_level\":15,
+            \"xp_boost\":25,
+            \"gold_boost\":5}
+        </item>
+        <item>
+            {\"name\":\"Battle axe\",
+            \"description\":\"A basic battle axe +10% xp, +10% gold\",
+            \"icon_filename\": \"@drawable/weapon_battleaxe\",
+            \"cost\":900,
+            \"required_level\":10,
+            \"xp_boost\":10,
+            \"gold_boost\":10}
+        </item>
+        <item>
+            {\"name\":\"Boomerang\",
+            \"description\":\"Classic australian murder weapon. +50% xp, +50% gold\",
+            \"icon_filename\": \"@drawable/weapon_hellish_battleaxe\",
+            \"cost\":45000,
+            \"required_level\":35,
+            \"xp_boost\":50,
+            \"gold_boost\":50}
+        </item>
+        <item>
+            {\"name\":\"Broadsword\",
+            \"description\":\"A knights broadsword. +8% xp, +15% gold\",
+            \"icon_filename\": \"@drawable/weapon_hellish_battleaxe\",
+            \"cost\":5200,
+            \"required_level\":12,
+            \"xp_boost\":8,
+            \"gold_boost\":15}
+        </item>
+        <item>
+            {\"name\":\"Longsword\",
+            \"description\":\"Stolen from a museum +5% xp, +50% gold\",
+            \"icon_filename\": \"@drawable/weapon_hellish_battleaxe\",
+            \"cost\":9500,
+            \"required_level\":35,
+            \"xp_boost\":5,
+            \"gold_boost\":50}
+        </item>
     </string-array>
 
     <string-array name="icons">
@@ -62,6 +125,34 @@
             \"name\":\"Very angry girl >:0\",
             \"cost\":250,
             \"required_level\":5}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_5_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Smiling :)\",
+            \"cost\":200,
+            \"required_level\":10}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_6_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Ugh :\",
+            \"cost\":800,
+            \"required_level\":15}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_7_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Sleepy girl -.-\",
+            \"cost\":4200,
+            \"required_level\":30}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/main_character_8_with_bg\",
+            \"icon_type\": 1,
+            \"name\":\"Demon girl >:)\",
+            \"cost\":34000,
+            \"required_level\":50}
         </item>
         <item>
             {\"icon_filename\":\"@drawable/icon_enemy_elf_archer\",
@@ -100,9 +191,129 @@
             \"purchased\": false,
             \"icon_type\": 0,
             \"name\":\"Human knight\",
-            \"icon_id\": 0,
             \"cost\":15,
             \"required_level\":5}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_bat\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Bat\",
+            \"cost\":800,
+            \"required_level\":8}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_crab\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Enemy Crab\",
+            \"cost\":1500,
+            \"required_level\":10}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_demon\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Demon\",
+            \"cost\":2500,
+            \"required_level\":15}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_demon_glowing\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Glowing demon\",
+            \"cost\":6800,
+            \"required_level\":30}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_dog\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Evil dog\",
+            \"cost\":5000,
+            \"required_level\":25}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_dwarf\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Crazed dwarf\",
+            \"cost\":300,
+            \"required_level\":4}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_eyeball\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Floating evil eyeball\",
+            \"cost\":6969,
+            \"required_level\":420}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_farmer\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Slimy evil farmer\",
+            \"cost\":700,
+            \"required_level\":7}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_king\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"The emperor\",
+            \"cost\":12000,
+            \"required_level\":50}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_monkey\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"The brutal monkey guy\",
+            \"cost\":3200,
+            \"required_level\":20}
+        </item>
+
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_old_man\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Some old guy\",
+            \"cost\":500,
+            \"required_level\":5}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_possessed_wizard\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Possessed wizard\",
+            \"cost\":9000,
+            \"required_level\":19}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_queen\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"Evil queen\",
+            \"cost\":7000,
+            \"required_level\":29}
+        </item>
+        <item>
+            {\"icon_filename\":\"@drawable/icon_enemy_wizard\",
+            \"purchased\": false,
+            \"icon_type\": 0,
+            \"name\":\"A bad wizard\",
+            \"cost\":8405,
+            \"required_level\":24}
         </item>
     </string-array>
 </resources>

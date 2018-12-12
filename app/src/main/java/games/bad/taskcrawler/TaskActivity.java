@@ -96,11 +96,12 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         final Calendar myCalender = Calendar.getInstance();
 
+        /*
         next_occurrence_year = myCalender.get(Calendar.YEAR);
         next_occurrence_month = myCalender.get(Calendar.MONTH);
         next_occurrence_day = myCalender.get(Calendar.DAY_OF_MONTH);
         next_occurrence_hour = myCalender.get(Calendar.HOUR_OF_DAY);
-        next_occurrence_minute = myCalender.get(Calendar.MINUTE);
+        next_occurrence_minute = myCalender.get(Calendar.MINUTE);*/
 
 
         taskNameInput.addTextChangedListener(new TextWatcher() {
@@ -181,26 +182,38 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     protected void updateIconImageView() {
-        if(Icon.iconExists(this, task_icon_id)) {
-            Icon icon = Icon.getIcon(this, task_icon_id);
-            iconImageView.setImageResource(this.getResources().getIdentifier(icon.getIconFilename(), "drawable", this.getPackageName()));
-            iconTextView.setText(icon.getName());
+        if(task_icon_id != -1) {
+            if (Icon.iconExists(this, task_icon_id)) {
+                Icon icon = Icon.getIcon(this, task_icon_id);
+                iconImageView.setImageResource(this.getResources().getIdentifier(icon.getIconFilename(), "drawable", this.getPackageName()));
+                iconTextView.setText(icon.getName());
+            }
         }
     }
 
     protected void updateRecurrenceTextView() {
-        recurrenceTextView.setText(Task.getIntervalAsString(interval_days, interval_hours, true));
-        onInputChanged();
+        if(interval_hours != -1 || interval_days != -1) {
+            recurrenceTextView.setText(Task.getIntervalAsString(interval_days, interval_hours, true));
+            onInputChanged();
+        }
     }
 
     protected void updateLengthTextView() {
-        lengthTextView.setText(Task.getLengthAsString(length_hour, length_minute, false));
-        onInputChanged();
+        if(length_hour != -1 || length_minute != -1) {
+            lengthTextView.setText(Task.getLengthAsString(length_hour, length_minute, false));
+            onInputChanged();
+        }
     }
 
     protected void updateFirstTimeTextView() {
-        firstOccurrenceTextView.setText(Task.getNextOccurrenceAsString(next_occurrence_year, next_occurrence_month, next_occurrence_day, next_occurrence_hour, next_occurrence_minute));
-        onInputChanged();
+        if(next_occurrence_year != -1 ||
+                next_occurrence_month != -1 ||
+                next_occurrence_day != -1 ||
+                next_occurrence_hour != -1 ||
+                next_occurrence_minute != -1) {
+            firstOccurrenceTextView.setText(Task.getNextOccurrenceAsString(next_occurrence_year, next_occurrence_month, next_occurrence_day, next_occurrence_hour, next_occurrence_minute));
+            onInputChanged();
+        }
     }
 
     protected void showRecurrencePickerDialog() {
@@ -285,7 +298,6 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private void showFirstTimeTimePickerDialog(final int dp_year, final int dp_month, final int dp_dayOfMonth) {
-
         // Define the Time Picker Dialog
         final TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -330,7 +342,15 @@ public abstract class TaskActivity extends AppCompatActivity {
             }
         };
 
-        datePickerDialog = new DatePickerDialog(this, myDateListener, next_occurrence_year, next_occurrence_month, next_occurrence_day);
+        if(next_occurrence_year == -1 ||
+                next_occurrence_month == -1 ||
+                next_occurrence_day == -1) {
+            Calendar nowCalendar = Calendar.getInstance();
+            nowCalendar.setTimeInMillis(System.currentTimeMillis());
+            datePickerDialog = new DatePickerDialog(this, myDateListener, nowCalendar.get(Calendar.YEAR), nowCalendar.get(Calendar.MONTH), nowCalendar.get(Calendar.DAY_OF_MONTH));
+        }else{
+            datePickerDialog = new DatePickerDialog(this, myDateListener, next_occurrence_year, next_occurrence_month, next_occurrence_day);
+        }
         datePickerDialog.setTitle("Which day will it start?");
         datePickerDialog.show();
     }
@@ -369,5 +389,55 @@ public abstract class TaskActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("task_title", task_title);
+        savedInstanceState.putInt("length_hour", length_hour);
+        savedInstanceState.putInt("length_minute", length_minute);
+
+        savedInstanceState.putInt("task_icon_id", task_icon_id);
+
+        savedInstanceState.putInt("next_occurrence_year", next_occurrence_year);
+        savedInstanceState.putInt("next_occurrence_month", next_occurrence_month);
+        savedInstanceState.putInt("next_occurrence_day", next_occurrence_day);
+        savedInstanceState.putInt("next_occurrence_hour", next_occurrence_hour);
+        savedInstanceState.putInt("next_occurrence_minute", next_occurrence_minute);
+
+        savedInstanceState.putInt("interval_days", interval_days);
+        savedInstanceState.putInt("interval_hours", interval_hours);
+
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+//onRestoreInstanceState
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+
+        task_icon_id = savedInstanceState.getInt("task_icon_id", -1);
+        task_title = savedInstanceState.getString("task_title", "");
+        length_hour = savedInstanceState.getInt("length_hour", -1);
+        length_minute = savedInstanceState.getInt("length_minute", -1);
+
+        next_occurrence_year = savedInstanceState.getInt("next_occurrence_year", -1);
+        next_occurrence_month = savedInstanceState.getInt("next_occurrence_month", -1);
+        next_occurrence_day = savedInstanceState.getInt("next_occurrence_day", -1);
+        next_occurrence_hour = savedInstanceState.getInt("next_occurrence_hour", -1);
+        next_occurrence_minute = savedInstanceState.getInt("next_occurrence_minute", -1);
+        interval_days = savedInstanceState.getInt("interval_days", -1);
+        interval_hours = savedInstanceState.getInt("interval_hours", -1);
+
+        updateIconImageView();
+        updateFirstTimeTextView();
+        updateLengthTextView();
+        updateRecurrenceTextView();
     }
 }
