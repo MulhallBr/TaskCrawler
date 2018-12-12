@@ -78,7 +78,6 @@ public class IconShopListAdapter extends RecyclerView.Adapter<IconShopListAdapte
             notifyDataSetChanged();
         }
     }
-
     @Override
     public int getItemCount() {
         return this.icons.size();

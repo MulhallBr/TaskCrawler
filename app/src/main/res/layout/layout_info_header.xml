@@ -88,16 +88,16 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="10dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:max="100"
         android:progress="25"
         android:progressDrawable="@drawable/progressbar"
         app:layout_constraintBottom_toBottomOf="@+id/playerIconImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playerIconImageView"
+        app:layout_constraintStart_toEndOf="@+id/equippedWeaponImageView"
         app:layout_constraintTop_toBottomOf="@+id/playerInfoLevel" />
 
     <ImageView

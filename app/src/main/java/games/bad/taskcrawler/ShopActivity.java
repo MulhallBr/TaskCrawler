@@ -23,8 +23,10 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
     private static final String TAG = "ShopActivity";
     private RecyclerView weapon_recyclerview;
     private RecyclerView icon_recyclerview;
+
     WeaponShopListAdapter weaponShopListAdapter;
     IconShopListAdapter iconShopListAdapter;
+
     private TabLayout shopTabLayout;
 
     @Override
@@ -40,6 +42,7 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
       
         weapon_recyclerview = findViewById(R.id.weapon_recyclerview);
         icon_recyclerview = findViewById(R.id.shop_icon_recyclerview);
+
         shopTabLayout = findViewById(R.id.shopTabLayout);
 
         shopTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -96,13 +99,13 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
         //purchase icon thing
         PurchaseIconDialog pid = new PurchaseIconDialog(this, icon);
         pid.show();
+
         pid.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 updateAdapters();
             }
         });
-
     }
 
     public void tabSelected(int position) {
@@ -113,8 +116,9 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
         }else if(position == 1) {
             weapon_recyclerview.setVisibility(View.GONE);
             icon_recyclerview.setVisibility(View.VISIBLE);
-        }else {
-
+        }else if(position == 2){
+            weapon_recyclerview.setVisibility(View.GONE);
+            icon_recyclerview.setVisibility(View.GONE);
         }
     }
 
@@ -124,7 +128,6 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
 
         List<Icon> icons = Icon.getAllUnpurchasedIcons(this);
         this.iconShopListAdapter.updateList(icons);
-
     }
 
     @Override
@@ -133,5 +136,18 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
         return true;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("current_tab", shopTabLayout.getSelectedTabPosition());
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        int currentTab = savedInstanceState.getInt("current_tab", 0);
+
+        TabLayout.Tab tab = shopTabLayout.getTabAt(currentTab);
+        tab.select();
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 }

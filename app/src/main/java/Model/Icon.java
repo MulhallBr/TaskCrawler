@@ -28,6 +28,9 @@ public class Icon extends Item {
         return iconType;
     }
 
+    public String getItemType() {
+        return "ICON";
+    }
 
     public Icon(String name, String iconFilename, int cost, int requiredLevel, boolean purchased, int iconType) {
         super(name, iconFilename, cost,requiredLevel,purchased);

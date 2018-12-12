@@ -1,7 +1,5 @@
 package Adapters;
 
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -43,6 +41,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         this.tasks = tasks;
         this.context = context;
     }
+
 
     @NonNull
     @Override
