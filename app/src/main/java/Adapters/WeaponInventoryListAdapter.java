@@ -95,7 +95,6 @@ public class WeaponInventoryListAdapter extends RecyclerView.Adapter<WeaponInven
         TextView itemDescription;
         ConstraintLayout parentLayout;
 
-
         ViewHolder(View itemView) {
             super(itemView);
             itemIcon = itemView.findViewById( R.id.item_shop_icon);

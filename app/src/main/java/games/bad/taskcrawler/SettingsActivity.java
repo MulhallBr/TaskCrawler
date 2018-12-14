@@ -70,15 +70,9 @@ public class SettingsActivity extends AppCompatActivity {
         AppDatabase.getAppDatabase(this).taskDAO().nukeTable();
         AppDatabase.getAppDatabase(this).weaponDAO().nukeTable();
         AppDatabase.getAppDatabase(this).iconDAO().nukeTable();
-        AppDatabase.getAppDatabase(this).weaponDAO().nukeTable();
-        //AppDatabase.getAppDatabase(this).consumableDAO().nukeTable();
 
         //then, re-init the database. This will have to be a method inside each item class.
         Weapon.initializeItems(this, this.getResources());
         Icon.initializeItems(this, this.getResources());
-        Icon.initializeItems(this, this.getResources());
-
     }
-
-
 }

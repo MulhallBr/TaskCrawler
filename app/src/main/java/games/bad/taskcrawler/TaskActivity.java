@@ -94,16 +94,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         firstOccurrenceTextView = findViewById(R.id.firstOcurranceTextView);
         recurrenceTextView = findViewById(R.id.recurranceTextView);
 
-        final Calendar myCalender = Calendar.getInstance();
-
-        /*
-        next_occurrence_year = myCalender.get(Calendar.YEAR);
-        next_occurrence_month = myCalender.get(Calendar.MONTH);
-        next_occurrence_day = myCalender.get(Calendar.DAY_OF_MONTH);
-        next_occurrence_hour = myCalender.get(Calendar.HOUR_OF_DAY);
-        next_occurrence_minute = myCalender.get(Calendar.MINUTE);*/
-
-
         taskNameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {  }

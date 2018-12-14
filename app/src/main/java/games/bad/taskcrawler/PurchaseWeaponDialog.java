@@ -40,6 +40,7 @@ public class PurchaseWeaponDialog extends Dialog {
         itemTitle = findViewById(R.id.itemTitle);
         itemDescription = findViewById(R.id.itemDescription);
         itemIcon = findViewById(R.id.itemIcon);
+        cancelButton = findViewById(R.id.cancelButton);
 
         itemCost = findViewById(R.id.itemCost);
 
@@ -56,6 +57,13 @@ public class PurchaseWeaponDialog extends Dialog {
             purchaseButton.setEnabled(false);
             purchaseButton.setText("NOT ENOUGH GOLD");
         }
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override

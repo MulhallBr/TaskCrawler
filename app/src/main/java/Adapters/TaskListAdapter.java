@@ -42,7 +42,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         this.context = context;
     }
 
-
     @NonNull
     @Override
     public TaskListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -63,12 +62,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
         if(this.tasks.get(position).getTimeUntilDueInSeconds() < 0) {
             // The task is overdue!
-            // Sets the Task to a red background and sends a push notification.
+            // Sets the Task to a red background.
             holder.parentLayout.getBackground().setColorFilter(context.getResources().getColor(R.color.overdue), PorterDuff.Mode.MULTIPLY);
         }else{
-
             holder.parentLayout.getBackground().clearColorFilter();
-
         }
 
         holder.taskIcon.setImageResource(this.tasks.get(position).getIconResourceId(context, context.getResources()));

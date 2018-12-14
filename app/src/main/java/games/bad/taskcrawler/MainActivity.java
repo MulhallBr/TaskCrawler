@@ -135,12 +135,15 @@ public class MainActivity extends AppCompatActivity
 
         createNotificationChannel(); // Create the notification channel so this app can do notifications on OREO+
         updatePlayerDataView(); // Display player information.
-    }
 
+        if(tasks.size() != 0) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            this.startService(serviceIntent);
+        }
+    }
     // The task tap callback method.
     @Override
     public void onTaskTapped(Task task){
-
         // Pop up the Dialog view on top of the MainActivity.
         TaskPromptDialog tpd = new TaskPromptDialog(this, task);
 
@@ -153,7 +156,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         tpd.show();
-        doKeepDialog(tpd);
     }
 
     // Method in order to update the Player's different stats, displayed at the top of the screen.
@@ -205,26 +207,18 @@ public class MainActivity extends AppCompatActivity
             // If there are tasks, make sure that prompt is not visible.
             noTaskTextView.setVisibility(View.GONE);
         }
-
-
-
         this.taskListAdapter.updateList(tasks);
         updatePlayerDataView();
-
     }
 
     // We override this method in order to make certain updates.
     @Override
     public void onResume() {
         super.onResume();
-
         List<Task> tasks = Task.getTasksInOrder(this);
-
         taskListAdapter.updateList(Task.getTasksInOrder(this));
-
         // Check the "Tasks" item when the MainActivity resumes.
         navigationView.getMenu().getItem(0).setChecked(true);
-
         // Update the task list and the player's stats.
         updateTaskList();
         updatePlayerDataView();
@@ -311,12 +305,5 @@ public class MainActivity extends AppCompatActivity
             notificationManager.createNotificationChannel(channel);
 
         }
-    }
-    private static void doKeepDialog(Dialog dialog) {
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialog.getWindow().setAttributes(lp);
     }
 }

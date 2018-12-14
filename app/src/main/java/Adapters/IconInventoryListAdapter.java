@@ -78,7 +78,6 @@ public class IconInventoryListAdapter extends RecyclerView.Adapter<IconInventory
     public void updateList (List<Icon> icons) {
         if (icons != null) {
             this.icons.clear();
-            //Collections.sort(weapons); sort by required level!!!
             this.icons.addAll(icons);
             notifyDataSetChanged();
         }

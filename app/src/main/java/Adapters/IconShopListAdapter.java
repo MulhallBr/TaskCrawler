@@ -61,6 +61,8 @@ public class IconShopListAdapter extends RecyclerView.Adapter<IconShopListAdapte
             holder.unlockText.setText(String.format("Unlocks at level %d", this.icons.get(position).getRequiredLevel()));
         }else {
             //attach onclick listener....
+            holder.contentHolderLayout.setAlpha(1f);
+            holder.unlockText.setVisibility(View.GONE);
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,7 +75,6 @@ public class IconShopListAdapter extends RecyclerView.Adapter<IconShopListAdapte
     public void updateList (List<Icon> icons) {
         if (icons != null) {
             this.icons.clear();
-            //Collections.sort(weapons); sort by required level!!!
             this.icons.addAll(icons);
             notifyDataSetChanged();
         }

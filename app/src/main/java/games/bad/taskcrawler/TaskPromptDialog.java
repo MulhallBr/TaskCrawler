@@ -63,14 +63,12 @@ public class TaskPromptDialog extends Dialog {
                 fightButtonOnClick();
             }
         });
-
     }
 
     private void editButtonOnClick() {
         Intent myIntent = new Intent(activity, EditTaskActivity.class);
         myIntent.putExtra("task_id", this.task.getId());
         activity.startActivity(myIntent);
-        //dismiss();
     }
 
     private void fightButtonOnClick() {

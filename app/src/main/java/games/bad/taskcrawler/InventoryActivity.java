@@ -114,15 +114,6 @@ public class InventoryActivity extends AppCompatActivity implements WeaponTapCal
 
         updateAdapters();
 
-        /*
-        PurchaseWeaponDialog pwd = new PurchaseWeaponDialog(this, weapon);
-        pwd.show();
-        pwd.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                updateAdapters();
-            }
-        });*/
     }
 
     @Override

@@ -61,10 +61,12 @@ public class WeaponShopListAdapter extends RecyclerView.Adapter<WeaponShopListAd
             holder.unlockText.setText(String.format("Unlocks at level %d", this.weapons.get(position).getRequiredLevel()));
         }else {
             //attach onclick listener....
+            holder.contentHolderLayout.setAlpha(1f);
+            holder.unlockText.setVisibility(View.GONE);
+            holder.unlockText.setText(String.format("Unlocks at level %d", this.weapons.get(position).getRequiredLevel()));
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     listener.onWeaponTapped(weapon);
                 }
             });
