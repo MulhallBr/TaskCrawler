@@ -84,6 +84,7 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
     //the task tap callback callback method
     @Override
     public void onWeaponTapped(Weapon weapon){
+
         PurchaseWeaponDialog pwd = new PurchaseWeaponDialog(this, weapon);
         pwd.show();
         pwd.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -123,11 +124,15 @@ public class ShopActivity extends AppCompatActivity implements WeaponTapCallback
     }
 
     public void updateAdapters() {
-        List<Weapon> weapons = Weapon.getAllUnpurchasedWeapons(this);
-        this.weaponShopListAdapter.updateList(weapons);
-
         List<Icon> icons = Icon.getAllUnpurchasedIcons(this);
         this.iconShopListAdapter.updateList(icons);
+
+        List<Weapon> weapons = Weapon.getAllUnpurchasedWeapons(this);
+        //weapon_recyclerview.setAdapter(new WeaponShopListAdapter(weapons, this));
+        this.weaponShopListAdapter.updateList(weapons);
+        this.weaponShopListAdapter.notifyDataSetChanged();
+
+
     }
 
     @Override

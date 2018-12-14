@@ -28,19 +28,13 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
-        boolean i = true;
-
-       while (i) {
+       while (true) {
            long time_in_seconds = (getDueTimeInMillis(0) - System.currentTimeMillis()) / 1000;
-
             if (time_in_seconds < 0 && !isNotificationVisible()) {
-
                 notificationMethod("Task Crawler", "Your task is due!", 0); // Notification !!
-                i = false;
-
-            } else if (!isNotificationVisible()){
-                i = false;
+                break;
+            } else if (isNotificationVisible()){
+                break;
             }
         }
     }
@@ -55,7 +49,6 @@ public class NotificationService extends IntentService {
     public void notificationMethod(String title, String content, int index) {
 
         List<Task> tasks = Task.getTasksInOrder(this);
-
         // Create an intent for a deep-link to SecondActivity
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 

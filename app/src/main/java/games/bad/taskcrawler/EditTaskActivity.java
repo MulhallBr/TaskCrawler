@@ -9,7 +9,6 @@ import Model.AppDatabase;
 import Model.Task;
 
 public class EditTaskActivity extends TaskActivity {
-
     int taskID;
     Task task;
 
@@ -29,16 +28,13 @@ public class EditTaskActivity extends TaskActivity {
 
         // If it was not passed an ID, then show an error, and end the activity.
         if(taskID == -1) {
-
             Snackbar.make(parentLayout, "ERROR: Invalid Task ID!", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
-
             finish(); // Ending the activity.
         }
 
         task = Task.getTaskById(this, taskID);  // Grab the task the user wants to edit
                                                         // using the ID that was passed in.
-
         // Grab all of the Task's information using the class getters.
         task_title = task.getTitle();
         task_icon_id = task.getIconId();

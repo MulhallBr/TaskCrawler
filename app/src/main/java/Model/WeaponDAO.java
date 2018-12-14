@@ -26,10 +26,10 @@ public interface WeaponDAO {
     @Query("SELECT * FROM weapon_table ORDER BY id ASC")
     List<Weapon> getAllItems();
 
-    @Query("SELECT * FROM weapon_table WHERE purchased = 0 ORDER BY id ASC")
+    @Query("SELECT * FROM weapon_table WHERE purchased = 0 ORDER BY required_level ASC, id")
     List<Weapon> getAllUnpurchasedWeapons();
 
-    @Query("SELECT * FROM weapon_table WHERE purchased = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM weapon_table WHERE purchased = 1 ORDER BY required_level ASC, id")
     List<Weapon> getAllPurchasedWeapons();
 
     @Query("SELECT * FROM weapon_table WHERE id = :id")

@@ -18,7 +18,7 @@ import games.bad.taskcrawler.R;
 //this is an abstract class that is implemented by Weapon and Icon.
 //
 
-public class Item {
+public abstract class Item {
     private static final String TAG = "ITEM";
 
     public int getId() {

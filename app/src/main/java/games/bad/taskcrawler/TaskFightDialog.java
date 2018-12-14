@@ -27,8 +27,6 @@ public class TaskFightDialog extends Dialog {
         super(act);
         activity = act;
         this.task = task;
-
-        //task.complete();
     }
 
     protected void onCreate(Bundle savedInstanceState) {

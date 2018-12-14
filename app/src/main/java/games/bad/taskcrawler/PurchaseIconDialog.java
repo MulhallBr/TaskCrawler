@@ -36,6 +36,8 @@ public class PurchaseIconDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.buy_item_dialog);
 
+        cancelButton = findViewById(R.id.cancelButton);
+
         itemTitle = findViewById(R.id.itemTitle);
         itemDescription = findViewById(R.id.itemDescription);
         itemIcon = findViewById(R.id.itemIcon);
@@ -55,6 +57,13 @@ public class PurchaseIconDialog extends Dialog {
             purchaseButton.setEnabled(false);
             purchaseButton.setText("NOT ENOUGH GOLD");
         }
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
